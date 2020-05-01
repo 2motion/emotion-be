@@ -1,8 +1,8 @@
 name: Deploy Prod
 on:
   push:
-    tags: # Deploy tag (e.g. v1.0) to production
-      - 'v**'
+    branches:
+      - master
 jobs:
   deploy-prod:
     runs-on: ubuntu-latest
@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
-        node-version: '10.x'
+        node-version: '12.x'
     - name: Install Serverless Framework
       run: npm install -g serverless
     - name: Serverless AWS authentication
@@ -22,9 +22,8 @@ jobs:
         EOF
     - name: Install NPM dependencies
       run: npm install
-    # Optional
-    #- name: Build assets
-    #  run: npm run assets-prod
+    - name: Build assets
+      run: npm run build
     - name: Deploy Lambda functions
       run: sls deploy -s prod
     # Optional (to use with serverless-finch serverless plugin)
