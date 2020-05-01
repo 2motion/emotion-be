@@ -5,6 +5,7 @@
 
 .env
 dist
+.serverless
 
 # User-specific stuff:
 .idea/**/workspace.xml
