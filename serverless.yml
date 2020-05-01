@@ -1,11 +1,18 @@
-service: serverless-nestjs
+service: emtoion
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
+
+custom:
+  warmup:      
+      - production
+      - staging
 
 plugins:
+  - serverless-plugin-optimize
   - serverless-offline
+  - serverless-plugin-warmup
 
 package:
   exclude:
@@ -13,6 +20,7 @@ package:
     - src/**
     - test/**
     - e2e/**
+    - node_modules 
     - nodemon.json
     - README.md
 

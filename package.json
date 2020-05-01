@@ -60,6 +60,8 @@
     "nodemon": "^1.18.9",
     "prettier": "^1.19.1",
     "serverless-offline": "^4.9.2",
+    "serverless-plugin-optimize": "^4.1.4-rc.1",
+    "serverless-plugin-warmup": "^4.9.0",
     "supertest": "^4.0.2",
     "swagger-ui-express": "^4.0.2",
     "ts-jest": "^24.1.0",
