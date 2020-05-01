@@ -1,22 +1,33 @@
+
+name: Deploy Prod
 on:
   push:
-    branches:
-      - master
-name: Deploy master branch
+    tags: # Deploy tag (e.g. v1.0) to production
+      - 'v**'
 jobs:
-  deploy:
-    name: deploy
+  deploy-prod:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: npm ci
-      uses: actions/npm@master
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
       with:
-        args: install
-    - name: serverless deploy
-      uses: serverless/github-action@master
-      with:
-        args: deploy
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_EMOTION_IAM_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_EMOTION_IAM_SECRET_KEY }}
+        node-version: '10.x'
+    - name: Install Serverless Framework
+      run: npm install -g serverless
+    - name: Serverless AWS authentication
+      run: sls config credentials --provider aws --key ${{ secrets.AWS_EMOTION_IAM_ACCESS_KEY }} --secret ${{ secrets.AWS_EMOTION_IAM_SECRET_KEY }}
+    - name: Create env file
+      run: | # cp sample.env.yml env.yml
+        cat > env.yml << EOF
+        ${{ secrets.ENV }}
+        EOF
+    - name: Install NPM dependencies
+      run: npm install
+    # Optional
+    #- name: Build assets
+    #  run: npm run assets-prod
+    - name: Deploy Lambda functions
+      run: sls deploy -s prod
+    # Optional (to use with serverless-finch serverless plugin)
+    #- name: Deploy assets to S3
+    #  run: sls client deploy --no-delete-contents --no-confirm -s prod
