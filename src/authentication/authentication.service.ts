@@ -6,7 +6,6 @@ import AuthenticationServiceInterface from './interfaces/authentication.service.
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import CreateAccessTokenDto from './dto/create-access-token.dto';
 
 @Injectable()
 export class AuthenticationService implements AuthenticationServiceInterface {
@@ -16,9 +15,9 @@ export class AuthenticationService implements AuthenticationServiceInterface {
     private readonly configService: ConfigService,
   ) {}
 
-  public createAccessToken(createAccessToken: CreateAccessTokenDto): string {
+  public createAccessToken(account: AccountEntity): string {
     return jwt.sign(
-      {},
+      { accountId: account.id },
       this.configService.get<string>('ACCESS_TOKEN_PRIVATE_KEY'),
       {
         expiresIn: 60 * 60 * (24 * 3),
@@ -39,7 +38,7 @@ export class AuthenticationService implements AuthenticationServiceInterface {
     );
   }
 
-  public findByEmailNumber(email: string): Observable<AccountEntity> {
+  public findByEmail(email: string): Observable<AccountEntity> {
     return from(
       this.accountRepository.findOne({
         where: { email },
