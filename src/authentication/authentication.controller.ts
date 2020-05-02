@@ -2,9 +2,12 @@ import { Controller, Body, Post } from '@nestjs/common';
 import SignUpDto from './dto/sign-up.dto';
 import { AuthenticationService } from './authentication.service';
 import CreateAccessTokenDto from './dto/create-access-token.dto';
+import AuthenticationControllerInterface from './interfaces/authentication.controller.interface';
+import { Observable } from 'rxjs';
 
 @Controller('authentication')
-export class AuthenticationController {
+export class AuthenticationController
+  implements AuthenticationControllerInterface {
   public constructor(
     private readonly authenticationService: AuthenticationService,
   ) {}
@@ -15,7 +18,7 @@ export class AuthenticationController {
   }
 
   @Post('sign-up')
-  public signUp(@Body() signUpDto: SignUpDto) {
+  public signUp(@Body() signUpDto: SignUpDto): Observable<number> {
     if (signUpDto.email) {
       return this.authenticationService.signUpByEmail(
         signUpDto.email,
