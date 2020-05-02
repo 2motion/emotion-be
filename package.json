@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "deploy": "./node_modules/.bin/sls deploy"
   },
   "husky": {
     "hooks": {
@@ -70,6 +71,7 @@
     "lint-staged": "^10.2.2",
     "nodemon": "^1.18.9",
     "prettier": "^1.19.1",
+    "serverless": "^1.69.0",
     "serverless-offline": "^4.9.2",
     "serverless-plugin-optimize": "^4.1.4-rc.1",
     "serverless-plugin-warmup": "^4.9.0",
