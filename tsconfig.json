@@ -1,6 +1,19 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@app/*": [
+        "src/*"
+      ]
+    },
+    "allowSyntheticDefaultImports": false,
+    "resolveJsonModule": true,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -8,7 +21,6 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true
   },
   "exclude": ["node_modules", "dist"]

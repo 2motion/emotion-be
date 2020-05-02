@@ -1,6 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ArticleEntity } from '../../entities/article.entity';
+import { AccountEntity } from '../../entities/account.entity';
+import { LoginHistoryEntity } from '../../entities/login-history.entity';
 
 export const databaseProviders = [
   {
@@ -16,7 +18,7 @@ export const databaseProviders = [
         database: configService.get<string>('DB_DATABASE'),
       } as any);
 
-      sequelize.addModels([ArticleEntity]);
+      sequelize.addModels([ArticleEntity, AccountEntity, LoginHistoryEntity]);
 
       await sequelize.sync({
         force: true,

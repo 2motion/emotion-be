@@ -8,6 +8,7 @@ import * as express from 'express';
 import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
 import * as compression from 'compression';
+import { ValidationPipe } from '@nestjs/common';
 
 let cachedServer: Server;
 
@@ -21,6 +22,7 @@ export const bootstrapServer = async (): Promise<Server> => {
   app.enableCors();
   app.use(helmet());
   app.use(compression());
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.init();
   return awsServerlessExpress.createServer(expressApp);
