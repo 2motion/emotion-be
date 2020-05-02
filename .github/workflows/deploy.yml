@@ -34,10 +34,8 @@ jobs:
         fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
       if: always() # Pick up events even if the job fails or is canceled.
       env:
-        SERVERLESS_ACCESS_KEY: ${{ secrets.AWS_EMOTION_IAM_ACCESS_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-
         # or if using AWS creds directly
-        # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_EMOTION_IAM_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_EMOTION_IAM_SECRET_KEY }}
