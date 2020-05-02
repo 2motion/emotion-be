@@ -8,6 +8,8 @@ jobs:
     name: deploy
     runs-on: ubuntu-latest
     steps:
+    - name: Showing dir
+      run: ls -al
     - name: Npm install
       run: npm install 
     - name: Build
