@@ -25,9 +25,7 @@ jobs:
     - name: Build
       run: npm run build
     - name: serverless deploy
-      uses: serverless/github-action@master
-      with:
-        args: deploy
+      run: npm run deploy
     - uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
