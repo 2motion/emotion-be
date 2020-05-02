@@ -1,28 +1,24 @@
-name: Deploy
 on:
   push:
     branches:
       - master
+name: Deploy master branch
 jobs:
-  deploy-prod:
+  deploy:
+    name: deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
+    - uses: actions/checkout@master
+    - name: npm install
+      uses: actions/npm@master
       with:
-        node-version: '10.x'
-    - name: Install Serverless Framework
-      run: npm install -g serverless
-    - name: Serverless AWS authentication
-      run: sls config credentials --provider aws --key ${{ secrets.AWS_EMOTION_IAM_ACCESS_KEY }} --secret ${{ secrets.AWS_EMOTION_IAM_SECRET_KEY }}
-    - name: Create env file
-      run: | # cp sample.env.yml env.yml
-        cat > env.yml << EOF
-        ${{ secrets.ENV }}
-        EOF
-    - name: Install NPM dependencies
-      run: npm install
-    - name: Build assets
-      run: npm run build
-    - name: Deploy Lambda functions
-      run: sls deploy -s prod
+        args: install
+    - name: serverless deploy
+      uses: serverless/github-action@master
+      with:
+        args: deploy
+      env:
+        SERVERLESS_ACCESS_KEY: ${{ secrets.AWS_EMOTION_IAM_ACCESS_KEY }}
+        # or if using AWS creds directly
+        # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
