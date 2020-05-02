@@ -5,17 +5,24 @@ import { Server } from 'http';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import * as awsServerlessExpress from 'aws-serverless-express';
 import * as express from 'express';
+import * as dotenv from 'dotenv';
+import * as helmet from 'helmet';
 
 let cachedServer: Server;
 
-const bootstrapServer = async (): Promise<Server> => {
+export const bootstrapServer = async (): Promise<Server> => {
+  dotenv.config();
+
   const expressApp = express();
   const adapter = new ExpressAdapter(expressApp);
   const app = await NestFactory.create(AppModule, adapter);
+
   app.enableCors();
+  app.use(helmet());
+
   await app.init();
   return awsServerlessExpress.createServer(expressApp);
-}
+};
 
 export const handler: APIGatewayProxyHandler = async (event, context) => {
   if (!cachedServer) {
