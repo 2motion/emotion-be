@@ -7,6 +7,7 @@ import * as awsServerlessExpress from 'aws-serverless-express';
 import * as express from 'express';
 import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
+import * as compression from 'compression';
 
 let cachedServer: Server;
 
@@ -19,6 +20,7 @@ export const bootstrapServer = async (): Promise<Server> => {
 
   app.enableCors();
   app.use(helmet());
+  app.use(compression());
 
   await app.init();
   return awsServerlessExpress.createServer(expressApp);
