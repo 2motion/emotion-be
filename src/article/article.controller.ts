@@ -1,6 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import ArticleControllerInterface from './interfaces/article.controller.interface';
+import { ArticleService } from './article.service';
 
-@Controller('article')
+@Controller('articles')
 export class ArticleController implements ArticleControllerInterface {
+  public constructor(private readonly articleService: ArticleService) {}
+
+  @Get()
+  public findAll() {
+    return this.articleService.findAll();
+  }
 }
