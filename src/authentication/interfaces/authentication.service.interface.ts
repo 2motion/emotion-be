@@ -11,6 +11,7 @@ interface AuthenticationServiceInterface {
     password: string,
   ): Observable<number>;
   signUpByEmail(email: string, password: string): Observable<number>;
+  verfiyPassword(password: string, encryptedPassword: string): boolean;
 }
 
 export default AuthenticationServiceInterface;

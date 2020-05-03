@@ -29,12 +29,17 @@ export class AccountEntity extends Model<AccountEntity> {
 
   @AllowNull(true)
   @Column(DataType.TEXT)
-  public password: number;
+  public password: string;
 
   @AllowNull(false)
   @Default(1)
   @Column(DataType.TINYINT)
   public isPending: number;
+
+  @AllowNull(false)
+  @Default(0)
+  @Column(DataType.TINYINT)
+  public isBlock: number;
 
   @CreatedAt
   @AllowNull(false)

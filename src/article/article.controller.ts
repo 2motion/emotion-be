@@ -1,13 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import ArticleControllerInterface from './interfaces/article.controller.interface';
 import { ArticleService } from './article.service';
+import { AuthGuard } from '@app/shared/guard/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('articles')
 export class ArticleController implements ArticleControllerInterface {
   public constructor(private readonly articleService: ArticleService) {}
 
   @Get()
-  public findAll() {
-    return this.articleService.findAll();
+  public findAndCountAll() {
+    return this.articleService.findAndCountAll();
   }
+
+  @Post()
+  public create() {}
 }

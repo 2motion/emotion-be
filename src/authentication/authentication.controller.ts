@@ -14,7 +14,9 @@ export class AuthenticationController
   ) {}
 
   @Post('token')
-  public createAccessToken(createAccessTokenDto: CreateAccessTokenDto): any {
+  public createAccessToken(
+    @Body() createAccessTokenDto: CreateAccessTokenDto,
+  ): Observable<string> {
     const account$ = (() => {
       if (createAccessTokenDto.email) {
         return this.authenticationService.findByEmail(
@@ -31,9 +33,26 @@ export class AuthenticationController
         if (!account) {
           throw new BadRequestException();
         }
-        return account;
-      }),
-      concatMap(account => {
+
+        if (account.isPending) {
+          throw new BadRequestException();
+        }
+
+        if (account.isBlock) {
+          throw new BadRequestException(
+            'Sorry, Your account has been blocked.',
+          );
+        }
+
+        if (
+          !this.authenticationService.verfiyPassword(
+            createAccessTokenDto.password,
+            account.password,
+          )
+        ) {
+          throw new BadRequestException();
+        }
+
         return this.authenticationService.createAccessToken(account);
       }),
     );

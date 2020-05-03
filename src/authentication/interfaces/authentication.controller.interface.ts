@@ -3,7 +3,9 @@ import SignUpDto from '../dto/sign-up.dto';
 import { Observable } from 'rxjs';
 
 interface AuthenticationControllerInterface {
-  createAccessToken(createAccessTokenDto: CreateAccessTokenDto): string;
+  createAccessToken(
+    createAccessTokenDto: CreateAccessTokenDto,
+  ): Observable<string>;
   signUp(signUpDto: SignUpDto): Observable<number>;
 }
 

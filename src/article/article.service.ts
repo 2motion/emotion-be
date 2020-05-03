@@ -8,7 +8,7 @@ export class ArticleService {
     private articleRepository: typeof ArticleEntity,
   ) {}
 
-  public findAll() {
-    return this.articleRepository.findAll();
+  public findAndCountAll() {
+    return this.articleRepository.findAndCountAll();
   }
 }

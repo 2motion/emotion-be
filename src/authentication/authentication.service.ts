@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, OnModuleInit } from '@nestjs/common';
 import { AccountEntity } from 'src/entities/account.entity';
 import { from, Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
@@ -6,6 +6,8 @@ import AuthenticationServiceInterface from './interfaces/authentication.service.
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { InjectEventEmitter } from 'nest-emitter';
+import { AppEventEmitter } from '@app/shared/event/app.event';
 
 @Injectable()
 export class AuthenticationService implements AuthenticationServiceInterface {
@@ -23,6 +25,10 @@ export class AuthenticationService implements AuthenticationServiceInterface {
         expiresIn: 60 * 60 * (24 * 3),
       },
     );
+  }
+
+  public verfiyPassword(password: string, encryptedPassword: string): boolean {
+    return bcrypt.compareSync(password, encryptedPassword);
   }
 
   public encryptedPassword(password: string): string {
