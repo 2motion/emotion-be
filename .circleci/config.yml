@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@1.1.6
-  coveralls: coveralls/coveralls@x.y.z
+  coveralls: coveralls/coveralls@1.0.6
 jobs:
   build-and-test:
     executor:
@@ -10,11 +10,9 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: npm install
+            - run: npm install && make test-coverage
+            - coveralls/upload
             - run: npm test
-      - codecov/upload:
-          file: {{ coverage_report_filepath }}
-
 workflows:
     build-and-test:
       jobs:
