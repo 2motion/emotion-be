@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-Emotion, 2motion.
+  당신의 감정, 감성을 기록해보세요.
 </p>
 
 <p align="center">
