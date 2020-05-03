@@ -34,6 +34,10 @@ export class AuthenticationService implements AuthenticationServiceInterface {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(saltRounds));
   }
 
+  public findById(accountId: number): Observable<AccountEntity> {
+    return from(this.accountRepository.findByPk(accountId));
+  }
+
   public findByPhoneNumber(phoneNumber: string): Observable<AccountEntity> {
     return from(
       this.accountRepository.findOne({

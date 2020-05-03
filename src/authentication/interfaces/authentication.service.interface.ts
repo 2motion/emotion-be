@@ -10,6 +10,7 @@ interface AuthenticationServiceInterface {
     phoneNumber: string,
     password: string,
   ): Observable<number>;
+  findById(accountId: number): Observable<AccountEntity>;
   signUpByEmail(email: string, password: string): Observable<number>;
   verfiyPassword(password: string, encryptedPassword: string): boolean;
 }

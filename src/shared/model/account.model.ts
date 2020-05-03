@@ -1,4 +1,4 @@
-abstract class AccountModel {
+class AccountModel {
   public id: number;
   public name: string;
   public avatarUrl: string;

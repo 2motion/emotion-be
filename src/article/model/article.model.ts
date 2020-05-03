@@ -1,8 +1,9 @@
-abstract class ArticleModel {
-    public title: string;
-    public body: string;
-    public createdAt: number;
-    public updatedAt: number;
-};
+class ArticleModel {
+  public id: number;
+  public title: string;
+  public body: string;
+  public createdAt: number;
+  public updatedAt: number;
+}
 
 export default ArticleModel;

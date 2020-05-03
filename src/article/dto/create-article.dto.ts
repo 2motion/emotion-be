@@ -1,6 +1,6 @@
 import { IsOptional, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
 
-class CreateAccessTokenDto {
+class CreateArticleDto {
   @MaxLength(200)
   @MinLength(1)
   @IsNotEmpty()
@@ -13,4 +13,4 @@ class CreateAccessTokenDto {
   public photos: File[];
 }
 
-export default CreateAccessTokenDto;
+export default CreateArticleDto;

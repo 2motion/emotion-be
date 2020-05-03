@@ -11,6 +11,7 @@ import {
   AllowNull,
   BelongsTo,
   ForeignKey,
+  Default,
 } from 'sequelize-typescript';
 import { AccountEntity } from './account.entity';
 
@@ -27,12 +28,17 @@ export class ArticleEntity extends Model<ArticleEntity> {
 
   @AllowNull(true)
   @Column(DataType.TEXT)
-  public body: number;
+  public body: string;
 
   @ForeignKey(() => AccountEntity)
   @AllowNull(false)
   @Column(DataType.BIGINT)
   public accountId: number;
+
+  @Default(1)
+  @AllowNull(false)
+  @Column(DataType.TINYINT)
+  public isEnabledComment: number;
 
   @CreatedAt
   @AllowNull(false)

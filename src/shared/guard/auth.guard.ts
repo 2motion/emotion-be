@@ -7,6 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
+import JwtDecodedInterface from '../interface/jwt-decoded.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -34,6 +35,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
+    request.decodedToken = decoded as JwtDecodedInterface;
     return true;
   }
 }
