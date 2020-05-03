@@ -9,7 +9,10 @@ import {
   AutoIncrement,
   PrimaryKey,
   AllowNull,
+  BelongsTo,
+  ForeignKey,
 } from 'sequelize-typescript';
+import { AccountEntity } from './account.entity';
 
 @Table
 export class ArticleEntity extends Model<ArticleEntity> {
@@ -26,6 +29,11 @@ export class ArticleEntity extends Model<ArticleEntity> {
   @Column(DataType.TEXT)
   public body: number;
 
+  @ForeignKey(() => AccountEntity)
+  @AllowNull(false)
+  @Column(DataType.BIGINT)
+  public accountId: number;
+
   @CreatedAt
   @AllowNull(false)
   @Column(DataType.DATE)
@@ -40,4 +48,7 @@ export class ArticleEntity extends Model<ArticleEntity> {
   @AllowNull(true)
   @Column(DataType.DATE)
   public deleteAt: Date;
+
+  @BelongsTo(() => AccountEntity)
+  public account: AccountEntity;
 }
