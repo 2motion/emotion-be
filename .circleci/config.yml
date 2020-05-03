@@ -10,9 +10,8 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: npm install && make test-coverage
-            - coveralls/upload
-            - run: npm test
+            - run: npm install
+            - run: npm test:cov
 workflows:
     build-and-test:
       jobs:
