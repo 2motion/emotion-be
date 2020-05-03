@@ -79,7 +79,7 @@
     "nodemon": "2.0.3",
     "prettier": "1.19.1",
     "serverless": "1.69.0",
-    "serverless-offline": "4.10.6",
+    "serverless-offline": "6.1.4",
     "serverless-plugin-optimize": "4.1.4-rc.1",
     "serverless-plugin-warmup": "4.9.0",
     "standard-version": "7.1.0",
