@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  당신의 감정, 감성을 기록해보세요.
+  당신의 감정, 갬성을 기록하세요.
 </p>
 
 <p align="center">
@@ -15,3 +15,14 @@
     <img src='https://coveralls.io/repos/github/2motion/emotion-be/badge.svg?branch=master' alt='Coverage Status' />
   </a>
 </p>
+
+
+## Project Stack
+
+- Node.ks
+- Typescript
+- RxJS
+- Serverless
+- Sequelize
+- Elastic Search
+- Koa

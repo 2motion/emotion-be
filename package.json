@@ -16,7 +16,7 @@
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test:cov": "jest --coverage && coveralls < coverage/lcov.info",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "deploy": "./node_modules/.bin/sls deploy"
@@ -71,6 +71,7 @@
     "@types/node": "12.12.37",
     "@types/sequelize": "4.28.8",
     "@types/supertest": "2.0.9",
+    "coveralls": "^3.1.0",
     "eslint": "6.8.0",
     "husky": "4.2.5",
     "jest": "25.5.4",
@@ -92,6 +93,9 @@
     "typescript": "3.8.3"
   },
   "jest": {
+    "moduleNameMapper": {
+      "^@app/(.*)": "<rootDir>/$1"
+    },
     "moduleFileExtensions": [
       "js",
       "json",
