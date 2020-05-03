@@ -1,8 +1,3 @@
-
-<p align="center">
-  <a href="https://github.com/2motion" target="blank"><img src="https://avatars0.githubusercontent.com/u/54016194" width="120" alt="Emotion" /></a>
-</p>
-
 <p align="center">
   당신의 감정, 갬성을 기록하세요.
 </p>
