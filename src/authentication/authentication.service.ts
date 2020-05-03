@@ -6,8 +6,6 @@ import AuthenticationServiceInterface from './interfaces/authentication.service.
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { InjectEventEmitter } from 'nest-emitter';
-import { AppEventEmitter } from '@app/shared/event/app.event';
 
 @Injectable()
 export class AuthenticationService implements AuthenticationServiceInterface {
