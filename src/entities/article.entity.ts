@@ -40,6 +40,11 @@ export class ArticleEntity extends Model<ArticleEntity> {
   @Column(DataType.TINYINT)
   public isEnabledComment: number;
 
+  @Default(0)
+  @AllowNull(false)
+  @Column(DataType.TINYINT)
+  public isDraft: number;
+
   @CreatedAt
   @AllowNull(false)
   @Column(DataType.DATE)
