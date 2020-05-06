@@ -82,7 +82,7 @@
     "serverless-offline": "6.1.5",
     "serverless-plugin-optimize": "4.1.4-rc.1",
     "serverless-plugin-warmup": "4.9.0",
-    "standard-version": "7.1.0",
+    "standard-version": "8.0.0",
     "supertest": "4.0.2",
     "swagger-ui-express": "4.1.4",
     "ts-jest": "25.5.0",
