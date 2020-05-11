@@ -78,7 +78,7 @@
     "lint-staged": "10.2.2",
     "nodemon": "2.0.3",
     "prettier": "2.0.5",
-    "serverless": "1.70.0",
+    "serverless": "1.70.1",
     "serverless-offline": "6.1.5",
     "serverless-plugin-optimize": "4.1.4-rc.1",
     "serverless-plugin-warmup": "4.9.0",
