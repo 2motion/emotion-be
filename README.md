@@ -14,7 +14,7 @@
 
 ## Project Stack
 
-- Node.ks
+- Node.js
 - Typescript
 - RxJS
 - Serverless
