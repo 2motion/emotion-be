@@ -5,6 +5,8 @@
 
 .env
 dist
+_warmup
+_optimize
 .serverless
 
 # User-specific stuff:
