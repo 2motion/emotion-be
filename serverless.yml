@@ -23,7 +23,8 @@ plugins:
   - serverless-domain-manager
 
 package:
-  excludeDevDependencies: true
+  individually: true
+  excludeDevDependencies: false
   exclude:
     - .git/**
     - src/**

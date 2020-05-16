@@ -9,11 +9,14 @@ import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
 import * as compression from 'compression';
 import { ValidationPipe } from '@nestjs/common';
+import * as Sentry from '@sentry/node';
 
 let cachedServer: Server;
 
 export const bootstrapServer = async (): Promise<Server> => {
   dotenv.config();
+
+  Sentry.init({ dsn: process.env.SENTRY_DSN });
 
   const expressApp = express();
   const adapter = new ExpressAdapter(expressApp);
