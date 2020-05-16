@@ -29,7 +29,7 @@ export class AuthenticationController
     })();
 
     return account$.pipe(
-      map(account => {
+      map((account) => {
         if (!account) {
           throw new BadRequestException();
         }
@@ -70,19 +70,21 @@ export class AuthenticationController
     })();
 
     return account$.pipe(
-      concatMap(account => {
+      concatMap((account) => {
         if (account) {
           throw new BadRequestException();
         }
 
         if (signUpDto.email) {
           return this.authenticationService.signUpByEmail(
+            signUpDto.name,
             signUpDto.email,
             signUpDto.password,
           );
         }
 
         return this.authenticationService.signUpByPhoneNumber(
+          signUpDto.name,
           signUpDto.phoneNumber,
           signUpDto.password,
         );

@@ -7,5 +7,11 @@ export class AppService implements OnModuleInit {
   public constructor(
     @InjectEventEmitter() private readonly emitter: AppEventEmitter,
   ) {}
-  public onModuleInit() {}
+
+  public onModuleInit(): void {
+    this.emitter.on('slackNotification', async (webhook, template) => {
+      console.log('@@fuck');
+      await webhook.send(template);
+    });
+  }
 }

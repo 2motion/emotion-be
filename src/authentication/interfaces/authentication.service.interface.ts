@@ -7,11 +7,16 @@ interface AuthenticationServiceInterface {
   createAccessToken(account: AccountEntity): string;
   encryptedPassword(password: string): string;
   signUpByPhoneNumber(
+    name: string,
     phoneNumber: string,
     password: string,
   ): Observable<number>;
   findById(accountId: number): Observable<AccountEntity>;
-  signUpByEmail(email: string, password: string): Observable<number>;
+  signUpByEmail(
+    name: string,
+    email: string,
+    password: string,
+  ): Observable<number>;
   verfiyPassword(password: string, encryptedPassword: string): boolean;
 }
 

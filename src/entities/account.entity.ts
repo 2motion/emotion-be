@@ -19,6 +19,10 @@ export class AccountEntity extends Model<AccountEntity> {
   @Column(DataType.BIGINT)
   public id: number;
 
+  @AllowNull(false)
+  @Column(DataType.CHAR(30))
+  public name: string;
+
   @AllowNull(true)
   @Column(DataType.CHAR(20))
   public phoneNumber: string;

@@ -4,7 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { NestEmitterModule } from 'nest-emitter';
 import { EventEmitter } from 'events';
-import { AppController } from './app.controller';
+import { AppController } from '@app/app.controller';
+import { AppService } from '@app/app.service';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { AppController } from './app.controller';
     NestEmitterModule.forRoot(new EventEmitter()),
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule {}

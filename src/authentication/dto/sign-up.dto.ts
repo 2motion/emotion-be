@@ -8,6 +8,9 @@ import {
 } from 'class-validator';
 
 class SignUpDto {
+  @IsNotEmpty()
+  public name: string;
+
   @IsPhoneNumber('KR')
   @IsOptional()
   public phoneNumber?: string;

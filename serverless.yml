@@ -5,6 +5,15 @@ provider:
   runtime: nodejs12.x
 
 custom:
+  customDomain:
+    domainName: api.gamstagram.com
+    stage: ci
+    basePath: api
+    certificateName: '*.gamstagram.com'
+    createRoute53Record: true
+    endpointType: 'regional'
+    securityPolicy: tls_1_2
+    apiType: rest
   warmup:      
       - production
       - staging
@@ -13,6 +22,7 @@ plugins:
   - serverless-plugin-optimize
   - serverless-offline
   - serverless-plugin-warmup
+  - serverless-domain-manager
 
 package:
   exclude:
