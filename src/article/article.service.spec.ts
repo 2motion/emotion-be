@@ -4,13 +4,15 @@ import { AuthenticationService } from '@app/authentication/authentication.servic
 import { articleProviders } from './article.provider';
 import { authenticationProvider } from '@app/authentication/authentication.provider';
 import { ConfigModule } from '@nestjs/config';
+import { NestEmitterModule } from 'nest-emitter';
+import { EventEmitter } from 'events';
 
 describe('ArticleService', () => {
   let service: ArticleService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
+      imports: [ConfigModule, NestEmitterModule.forRoot(new EventEmitter())],
       providers: [
         ArticleService,
         AuthenticationService,

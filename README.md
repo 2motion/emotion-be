@@ -1,5 +1,5 @@
 <p align="center">
-  당신의 감정, 갬성을 기록하세요.
+  순간의 감정을 기록하고, 공유하세요.
 </p>
 
 <p align="center">
@@ -20,4 +20,5 @@
 - Serverless
 - Sequelize
 - Elastic Search
-- Koa
+- NestJS
+- Grafana

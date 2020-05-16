@@ -7,8 +7,6 @@ provider:
 custom:
   customDomain:
     domainName: api.gamstagram.com
-    stage: ci
-    basePath: api
     certificateName: '*.gamstagram.com'
     createRoute53Record: true
     endpointType: 'regional'

@@ -6,6 +6,8 @@ import { NestEmitterModule } from 'nest-emitter';
 import { EventEmitter } from 'events';
 import { AppController } from '@app/app.controller';
 import { AppService } from '@app/app.service';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { RavenModule, RavenInterceptor } from 'nest-raven';
 
 @Module({
   imports: [
@@ -13,8 +15,15 @@ import { AppService } from '@app/app.service';
     ArticleModule,
     AuthenticationModule,
     NestEmitterModule.forRoot(new EventEmitter()),
+    RavenModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useValue: new RavenInterceptor(),
+    },
+  ],
 })
 export class AppModule {}
