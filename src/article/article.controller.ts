@@ -18,7 +18,6 @@ import ArticleModel from './model/article.model';
 import { AuthenticationService } from '@app/authentication/authentication.service';
 import { concatMap } from 'rxjs/operators';
 
-@UseGuards(AuthGuard)
 @Controller('articles')
 export class ArticleController implements ArticleControllerInterface {
   public constructor(
@@ -31,13 +30,14 @@ export class ArticleController implements ArticleControllerInterface {
     return this.articleService.findAndCountAll();
   }
 
+  @UseGuards(AuthGuard)
   @Post()
   public create(
     @Body() createArticleDto: CreateArticleDto,
     @DecodedToken() { accountId }: JwtDecodedInterface,
   ): Observable<ArticleModel> {
     return this.authenticationService.findById(accountId).pipe(
-      concatMap(account => {
+      concatMap((account) => {
         if (!account) {
           throw new BadRequestException();
         }
