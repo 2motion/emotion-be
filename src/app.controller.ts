@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 @Controller()
 export class AppController {
   @Get('time')
-  public serverTime(): Observable<number> {
-    return of(Date.now());
+  public serverTime(): Observable<{ serverTime: number }> {
+    return of({ serverTime: Date.now() });
   }
 }

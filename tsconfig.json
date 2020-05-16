@@ -12,6 +12,7 @@
         "src/*"
       ]
     },
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": false,
     "resolveJsonModule": true,
     "declaration": true,
