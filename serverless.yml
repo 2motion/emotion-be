@@ -18,14 +18,13 @@ custom:
       - staging
 
 plugins:
-  - serverless-plugin-optimize
   - serverless-offline
   - serverless-plugin-warmup
   - serverless-domain-manager
 
 package:
   individually: true
-  excludeDevDependencies: false 
+  excludeDevDependencies: true
   exclude:
     - .git/**
     - src/**
