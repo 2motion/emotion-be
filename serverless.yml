@@ -25,7 +25,7 @@ plugins:
 
 package:
   individually: true
-  excludeDevDependencies: false
+  excludeDevDependencies: false 
   exclude:
     - .git/**
     - src/**
