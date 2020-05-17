@@ -8,7 +8,7 @@ import { AccountEntity } from '@app/entities/account.entity';
 import { from, Observable, Subscription, forkJoin } from 'rxjs';
 import { pluck, tap, map } from 'rxjs/operators';
 import AuthenticationServiceInterface from '@app/authentication/interfaces/authentication.service.interface';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { InjectEventEmitter } from 'nest-emitter';
