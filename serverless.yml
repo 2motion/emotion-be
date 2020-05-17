@@ -13,6 +13,7 @@ custom:
     securityPolicy: tls_1_2
     apiType: rest
   warmup:      
+      - dev
       - production
       - staging
 
