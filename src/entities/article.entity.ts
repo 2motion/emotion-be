@@ -60,6 +60,10 @@ export class ArticleEntity extends Model<ArticleEntity> {
   @Column(DataType.DATE)
   public deleteAt: Date;
 
+  @AllowNull(true)
+  @Column(DataType.CHAR(200))
+  public audioFileHashKey: string;
+
   @BelongsTo(() => AccountEntity)
   public account: AccountEntity;
 }

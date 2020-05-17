@@ -1,8 +1,10 @@
 import { Sequelize } from 'sequelize-typescript';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ArticleEntity } from '../../entities/article.entity';
-import { AccountEntity } from '../../entities/account.entity';
-import { LoginHistoryEntity } from '../../entities/login-history.entity';
+import { ArticleEntity } from '@app/entities/article.entity';
+import { AccountEntity } from '@app/entities/account.entity';
+import { LoginHistoryEntity } from '@app/entities/login-history.entity';
+import { ArticleFileEntity } from '@app/entities/article-file.entity';
+import { FileEntity } from '@app/entities/file.entity';
 
 export const databaseProviders = [
   {
@@ -18,7 +20,13 @@ export const databaseProviders = [
         database: configService.get<string>('DB_DATABASE'),
       } as any);
 
-      sequelize.addModels([ArticleEntity, AccountEntity, LoginHistoryEntity]);
+      sequelize.addModels([
+        ArticleEntity,
+        AccountEntity,
+        LoginHistoryEntity,
+        FileEntity,
+        ArticleFileEntity,
+      ]);
 
       await sequelize.sync({
         force: true,

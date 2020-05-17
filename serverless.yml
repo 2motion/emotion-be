@@ -10,7 +10,6 @@ custom:
     certificateName: '*.gamstagram.com'
     createRoute53Record: true
     endpointType: 'regional'
-    securityPolicy: tls_1_2
     apiType: rest
   warmup:      
       - dev
