@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ArticleEntity } from '@app/entities/article.entity';
 import { AccountEntity } from '@app/entities/account.entity';
@@ -14,11 +14,11 @@ export const databaseProviders = [
       const sequelize = new Sequelize({
         dialect: 'mysql',
         host: configService.get<string>('DB_HOST'),
-        port: configService.get<string>('DB_PORT'),
+        port: Number(configService.get<string>('DB_PORT')),
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-      } as any);
+      } as SequelizeOptions);
 
       sequelize.addModels([
         ArticleEntity,

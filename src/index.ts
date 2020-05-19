@@ -28,7 +28,7 @@ export const bootstrapServer = async (): Promise<Server> => {
   app.use(compression());
   app.useGlobalPipes(new ValidationPipe());
 
-  swaggerBootstrap(app);
+  await swaggerBootstrap(app);
 
   await app.init();
   return awsServerlessExpress.createServer(expressApp);
