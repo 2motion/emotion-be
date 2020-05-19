@@ -13,6 +13,7 @@ import {
 } from 'sequelize-typescript';
 import { ArticleEntity } from './article.entity';
 import { FileEntity } from './file.entity';
+import ArticleFileType from '@app/constants/article-file-type';
 
 @Table
 export class ArticleFileEntity extends Model<ArticleFileEntity> {
@@ -30,6 +31,10 @@ export class ArticleFileEntity extends Model<ArticleFileEntity> {
   @AllowNull(false)
   @Column(DataType.BIGINT)
   public fileId: number;
+
+  @AllowNull(false)
+  @Column(DataType.TINYINT)
+  public type: ArticleFileType;
 
   @CreatedAt
   @AllowNull(false)
