@@ -28,9 +28,7 @@ export const databaseProviders = [
         ArticleFileEntity,
       ]);
 
-      await sequelize.sync({
-        force: true,
-      });
+      await sequelize.authenticate();
 
       return sequelize;
     },
