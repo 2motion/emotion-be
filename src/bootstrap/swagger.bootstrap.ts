@@ -1694,8 +1694,6 @@ const swaggerBootstrap = (app: INestApplication) => {
     .addServer('http://localhost:3000/')
     .addBearerAuth({
       type: 'http',
-      description:
-        'BEAVER:BE 토큰 생성 참고 문서 👉🏻 http://team.devignlab.com/pages/viewpage.action?pageId=37847012',
     })
     .build();
 
@@ -1704,9 +1702,7 @@ const swaggerBootstrap = (app: INestApplication) => {
   });
 
   SwaggerModule.setup('/', app, document, {
-    customfavIcon:
-      'https://image-public.coinone.co.kr/favicon/coinone/favicon.ico',
-    customSiteTitle: 'BEAVER:BE REST API',
+    customSiteTitle: 'Gamstagram REST API',
     customCss: customCss(),
   });
 };

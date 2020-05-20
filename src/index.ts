@@ -28,13 +28,21 @@ export const bootstrapServer = async (): Promise<Server> => {
   app.use(compression());
   app.useGlobalPipes(new ValidationPipe());
 
-  await swaggerBootstrap(app);
+  swaggerBootstrap(app);
 
   await app.init();
   return awsServerlessExpress.createServer(expressApp);
 };
 
-export const handler: APIGatewayProxyHandler = async (event, context) => {
+export const handler: APIGatewayProxyHandler = async (
+  event,
+  context,
+  callback,
+) => {
+  if (event['source'] === 'serverless-plugin-warmup') {
+    console.log('WarmUp - Lambda is warm!');
+    return callback(null);
+  }
   if (!cachedServer) {
     const server = await bootstrapServer();
     cachedServer = server;
