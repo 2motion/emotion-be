@@ -6,6 +6,7 @@
   <a href="https://circleci.com/gh/2motion/emotion-be">
     <img src="https://circleci.com/gh/2motion/emotion-be.svg?style=svg" alt="Build status"/>
   </a>
+  <a href="https://www.codefactor.io/repository/github/2motion/emotion-be"><img src="https://www.codefactor.io/repository/github/2motion/emotion-be/badge" alt="CodeFactor" /></a>
   <a href='https://coveralls.io/github/2motion/emotion-be?branch=master'>
     <img src='https://coveralls.io/repos/github/2motion/emotion-be/badge.svg?branch=master' alt='Coverage Status' />
   </a>
