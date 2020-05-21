@@ -14,7 +14,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -27,6 +26,9 @@ jobs:
       run: npm run build
     - name: serverless deploy
       uses: serverless/github-action@master
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_EMOTION_IAM_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_EMOTION_IAM_SECRET_KEY }}
       with:
         args: deploy --stage production
     - uses: 8398a7/action-slack@v3
@@ -37,5 +39,3 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_EMOTION_IAM_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_EMOTION_IAM_SECRET_KEY }}  
