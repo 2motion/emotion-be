@@ -20,8 +20,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Showing dir
       run: ls -al
-    - name: Npm install
-      run: npm install 
+    - uses: actions/checkout@master
+    - name: npm install
+      uses: actions/npm@master
+      with:
+        args: install 
     - name: Build
       run: npm run build
     - name: serverless deploy
