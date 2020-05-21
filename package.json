@@ -86,7 +86,6 @@
     "serverless-domain-manager": "4.0.1",
     "serverless-offline": "6.1.7",
     "serverless-plugin-optimize": "4.1.4-rc.1",
-    "serverless-plugin-warmup": "4.9.0",
     "standard-version": "8.0.0",
     "supertest": "4.0.2",
     "swagger-ui-express": "4.1.4",

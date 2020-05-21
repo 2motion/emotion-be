@@ -13,16 +13,9 @@ custom:
     createRoute53Record: true
     endpointType: 'regional'
     apiType: rest
-  warmup:      
-    enabled: true
-    folderName: '_warmup'
-    cleanFolder: false
-    memorySize: 256
-    name: 'make-them-pop'
 
 plugins:
   - serverless-offline
-  - serverless-plugin-warmup
   - serverless-domain-manager
 
 package:
