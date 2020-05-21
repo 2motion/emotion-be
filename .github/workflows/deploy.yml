@@ -15,7 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
-    - uses: serverless/github-action@master  
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -27,7 +26,9 @@ jobs:
     - name: Build
       run: npm run build
     - name: serverless deploy
-      run: serverless deploy
+      uses: serverless/github-action@master
+      with:
+        args: deploy --stage production
     - uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
