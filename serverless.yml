@@ -2,6 +2,8 @@ service: emtoion
 
 provider:
   name: aws
+  memorySize: 512
+  region: ap-northeast-2
   runtime: nodejs12.x
 
 custom:
