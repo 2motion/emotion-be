@@ -1,11 +1,22 @@
-import { Controller, Body, Post, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Post,
+  BadRequestException,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import SignUpDto from './dto/sign-up.dto';
 import { AuthenticationService } from './authentication.service';
 import CreateAccessTokenDto from './dto/create-access-token.dto';
 import AuthenticationControllerInterface from './interfaces/authentication.controller.interface';
 import { Observable } from 'rxjs';
 import { map, concatMap } from 'rxjs/operators';
+import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
+import ArticleListModel from '@app/article/model/article-list.model';
+import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
 
+@ApiTags('authentication')
 @Controller('authentication')
 export class AuthenticationController
   implements AuthenticationControllerInterface {
@@ -13,6 +24,13 @@ export class AuthenticationController
     private readonly authenticationService: AuthenticationService,
   ) {}
 
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: String,
+  })
+  @ApiOperation({ summary: 'Access token 을 생성한다.' })
+  @CommonResponseReceiptDecorator()
   @Post('token')
   public createAccessToken(
     @Body() createAccessTokenDto: CreateAccessTokenDto,
@@ -58,6 +76,13 @@ export class AuthenticationController
     );
   }
 
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: Number,
+  })
+  @ApiOperation({ summary: '회원가입을 진행한다.' })
+  @CommonResponseReceiptDecorator()
   @Post('sign-up')
   public signUp(@Body() signUpDto: SignUpDto): Observable<number> {
     const account$ = (() => {
