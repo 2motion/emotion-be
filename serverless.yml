@@ -1,4 +1,4 @@
-service: emtoion
+service: gamstagram-be
 
 provider:
   name: aws
