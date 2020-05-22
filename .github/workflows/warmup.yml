@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: curl
-      run: curl http://api.gamstagram.com/
+      run: curl https://api.gamstagram.com/
