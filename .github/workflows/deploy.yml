@@ -22,6 +22,15 @@ jobs:
       run: ls -al
     - name: Generate .env file
       run: node provide.env.js 
+      env: 
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_DATABASE: ${{ secrets.DB_DATABASE }}
+        ACCESS_TOKEN_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN_PRIVATE_KEY }}
+        SLACK_WEBHOOK_URL_OF_NEW: ${{ secrets.SLACK_WEBHOOK_URL_OF_NEW }}
+        SENTRY_DSN: d
     - name: Showing dir
       run: ls -al
     - name: npm install
