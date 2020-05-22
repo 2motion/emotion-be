@@ -11,6 +11,7 @@ import {
   AllowNull,
   ForeignKey,
   BelongsTo,
+  Default,
 } from 'sequelize-typescript';
 import { AccountEntity } from './account.entity';
 
@@ -30,6 +31,7 @@ export class AccountVerfiyEntity extends Model<AccountVerfiyEntity> {
   @Column(DataType.TINYINT)
   public hashKey: number;
 
+  @Default(0)
   @AllowNull(false)
   @Column(DataType.TINYINT)
   public isVerified: number;

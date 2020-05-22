@@ -63,7 +63,9 @@ export class AuthenticationService
 
         return from(verifyEntity.account.update({
           isPending: true
-        }));
+        })).pipe(
+          concatMap(() => verifyEntity.update({isVerified: 1}))
+        );
       }),
       map(() => {})
     )
