@@ -21,7 +21,7 @@ jobs:
     - name: Showing dir
       run: ls -al
     - name: Generate .env file
-      run: node bin/bootstrap/provide.env.js 
+      run: node provide.env.js 
     - name: npm install
       run: npm install 
     - name: Build
