@@ -22,6 +22,7 @@ export class AuthenticationService
   public constructor(
     @Inject('ACCOUNT_REPOSITORY')
     private readonly accountRepository: typeof AccountEntity,
+    @Inject('ACCOUNT_VERFIY_REPOSITORY')
     private readonly accountVerfiyRepository: typeof AccountVerfiyEntity,
     private readonly configService: ConfigService,
     @InjectEventEmitter() private readonly emitter: AppEventEmitter,

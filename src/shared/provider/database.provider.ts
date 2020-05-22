@@ -5,6 +5,7 @@ import { AccountEntity } from '@app/entities/account.entity';
 import { LoginHistoryEntity } from '@app/entities/login-history.entity';
 import { ArticleFileEntity } from '@app/entities/article-file.entity';
 import { FileEntity } from '@app/entities/file.entity';
+import { AccountVerfiyEntity } from '@app/entities/account-verfiy.entity';
 
 export const databaseProviders = [
   {
@@ -23,6 +24,7 @@ export const databaseProviders = [
       sequelize.addModels([
         ArticleEntity,
         AccountEntity,
+        AccountVerfiyEntity,
         LoginHistoryEntity,
         FileEntity,
         ArticleFileEntity,
