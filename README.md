@@ -15,6 +15,7 @@
 
 GAMSTAGRAM:BE 는 NestJS 로 만들어진 `오픈 소스` 프로젝트 입니다.
 NestJS 는 Angular 에서 Insight 를 받은 Typescript 로 제작된 서버사이드 프레임워크 입니다.
+궁극적으로 FE 와 BE 의 디자인 패턴을 일원화하여 유연하게 구성할 수 있는 이상적인 형태를 지향하고 있습니다.
 
 FRP (Functional Reactive Programming) 형태로 구성했으며, 관련된 기술 스택과 사용한 기술에 대해 작성한 글을 아래 목록에서 소개하고 있으니 궁금하신분은 아래 내용을 참고해주시면 감사하겠습니다.
 
