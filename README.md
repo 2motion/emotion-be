@@ -23,3 +23,15 @@
 - Elastic Search
 - NestJS
 - Grafana
+
+## Usage aws resource
+
+- Lambda
+- Cloud Formation
+- Cloud Watch
+- SES
+- SNS
+- ROUTE 53
+- S3
+- RDS
+- SQS
