@@ -41,3 +41,9 @@ FRP (Functional Reactive Programming) 형태로 구성했으며, 관련된 기�
 - S3
 - RDS
 - SQS
+
+## Recommends article
+
+- [나는 코드를 쓸테니, 너는 인프라를 맡거라.](https://blog.hax0r.info/2018-11-28/i-will-write-the-code-you-will-be-in-charge-of-the-infrastructure/)
+- [Getting Started with Functional Reactive Programming Using RxJS](https://blog.hax0r.info/2018-05-10/getting-started-with-functional-reactive-programming-using-rxjs/)
+- [Reactive Programming](https://blog.hax0r.info/2018-05-09/reactive-programming/)
