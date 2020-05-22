@@ -20,6 +20,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Showing dir
       run: ls -al
+    - name: Generate .env file
+      run: node bin/bootstrap/provide.env.js 
     - name: npm install
       run: npm install 
     - name: Build
