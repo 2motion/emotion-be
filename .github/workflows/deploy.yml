@@ -31,6 +31,8 @@ jobs:
         ACCESS_TOKEN_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN_PRIVATE_KEY }}
         SLACK_WEBHOOK_URL_OF_NEW: ${{ secrets.SLACK_WEBHOOK_URL_OF_NEW }}
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        AWS_ACCESS_KEY_ID: ${{ AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ AWS_SECRET_ACCESS_KEY }}
     - name: Showing dir
       run: ls -al
     - name: npm install
