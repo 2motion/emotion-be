@@ -22,6 +22,8 @@ jobs:
       run: ls -al
     - name: Generate .env file
       run: node provide.env.js 
+    - name: Showing dir
+      run: ls -al
     - name: npm install
       run: npm install 
     - name: Build
