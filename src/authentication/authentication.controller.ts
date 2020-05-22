@@ -101,11 +101,11 @@ export class AuthenticationController
           throw new BadRequestException('Already exsists.');
         }
 
-        if (account.isBlock) {
+        if (account && account.isBlock) {
           throw new UnauthorizedException();
         }
 
-        if (account.isPending) {
+        if (account && account.isPending) {
           this.authenticationService.afterSignUp(account);
           return of(account.id);
         }
