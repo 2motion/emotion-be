@@ -10,7 +10,7 @@ custom:
   customDomain:
     domainName: api.gamstagram.com
     basePath: ''
-    stage: ${self:provider.stage}
+    stage: dev
     certificateName: '*.gamstagram.com'
     createRoute53Record: true
     endpointType: 'regional'
