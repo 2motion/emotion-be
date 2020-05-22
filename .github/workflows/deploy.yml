@@ -30,7 +30,7 @@ jobs:
         DB_DATABASE: ${{ secrets.DB_DATABASE }}
         ACCESS_TOKEN_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN_PRIVATE_KEY }}
         SLACK_WEBHOOK_URL_OF_NEW: ${{ secrets.SLACK_WEBHOOK_URL_OF_NEW }}
-        SENTRY_DSN: d
+        SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     - name: Showing dir
       run: ls -al
     - name: npm install
