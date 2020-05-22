@@ -10,6 +10,7 @@ import {
   PrimaryKey,
   AllowNull,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { AccountEntity } from './account.entity';
 
@@ -47,4 +48,7 @@ export class AccountVerfiyEntity extends Model<AccountVerfiyEntity> {
   @AllowNull(true)
   @Column(DataType.DATE)
   public deleteAt: Date;
+
+  @BelongsTo(() => AccountEntity)
+  public account: AccountEntity;
 }

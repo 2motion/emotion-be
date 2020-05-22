@@ -42,6 +42,33 @@ export class AuthenticationService
     );
   }
 
+  public verify(accountId: number, hashKey: number): Observable<void> {
+    return from(this.accountVerfiyRepository.findOne({
+      where: {
+        accountId,
+        hashKey
+      },
+      include: [
+        {
+          model: this.accountRepository,
+          where: {id: accountId},
+          required: true
+        }
+      ]
+    })).pipe(
+      concatMap(verifyEntity => {
+        if (!verifyEntity) {
+          throw new Error('잘 못된 인증 요청 입니다.');
+        }
+
+        return from(verifyEntity.account.update({
+          isPending: true
+        }));
+      }),
+      map(() => {})
+    )
+  }
+
   public verfiyPassword(password: string, encryptedPassword: string): boolean {
     return bcrypt.compareSync(password, encryptedPassword);
   }

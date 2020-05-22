@@ -7,6 +7,7 @@ interface AuthenticationControllerInterface {
     createAccessTokenDto: CreateAccessTokenDto,
   ): Observable<string>;
   signUp(signUpDto: SignUpDto): Observable<number>;
+  verify(verifyDto, ipAddress: string): Observable<void> ;
 }
 
 export default AuthenticationControllerInterface;

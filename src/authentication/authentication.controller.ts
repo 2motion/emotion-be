@@ -16,6 +16,8 @@ import { map, concatMap } from 'rxjs/operators';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import ArticleListModel from '@app/article/model/article-list.model';
 import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
+import VerifyDto from './dto/verify.dto';
+import { IpAddress } from '@app/shared/decorator/request-ip.decorator';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -75,6 +77,21 @@ export class AuthenticationController
         return this.authenticationService.createAccessToken(account);
       }),
     );
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: String,
+  })
+  @ApiOperation({ summary: '계정 인증을 한다.' })
+  @CommonResponseReceiptDecorator()
+  @Post('verify')
+  public verify(
+    @Body() {accountId, hashKey}: VerifyDto,
+    @IpAddress() ipAddress: string
+  ): Observable<void> {
+    return this.authenticationService.verify(accountId, hashKey);
   }
 
   @HttpCode(HttpStatus.OK)
