@@ -66,7 +66,6 @@ export class ArticleController implements ArticleControllerInterface {
           throw new UnauthorizedException();
         }
 
-        console.log('createArticleDto');
         return this.articleService.create(createArticleDto, accountId);
       }),
     );

@@ -43,6 +43,7 @@ export const handler: APIGatewayProxyHandler = async (
     console.log('WarmUp - Lambda is warm!');
     return callback(null);
   }
+  console.log('proccess env', process.env);
   if (!cachedServer) {
     const server = await bootstrapServer();
     cachedServer = server;
