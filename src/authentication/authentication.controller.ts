@@ -5,12 +5,13 @@ import {
   BadRequestException,
   HttpCode,
   HttpStatus,
+  UnauthorizedException,
 } from '@nestjs/common';
 import SignUpDto from './dto/sign-up.dto';
 import { AuthenticationService } from './authentication.service';
 import CreateAccessTokenDto from './dto/create-access-token.dto';
 import AuthenticationControllerInterface from './interfaces/authentication.controller.interface';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, concatMap } from 'rxjs/operators';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import ArticleListModel from '@app/article/model/article-list.model';
@@ -53,7 +54,7 @@ export class AuthenticationController
         }
 
         if (account.isPending) {
-          throw new BadRequestException();
+          throw new UnauthorizedException();
         }
 
         if (account.isBlock) {
@@ -84,34 +85,43 @@ export class AuthenticationController
   @ApiOperation({ summary: '회원가입을 진행한다.' })
   @CommonResponseReceiptDecorator()
   @Post('sign-up')
-  public signUp(@Body() signUpDto: SignUpDto): Observable<number> {
+  public signUp(
+    @Body() { name, email, phoneNumber, password }: SignUpDto,
+  ): Observable<number> {
     const account$ = (() => {
-      if (signUpDto.email) {
-        return this.authenticationService.findByEmail(signUpDto.email);
+      if (email) {
+        return this.authenticationService.findByEmail(email);
       }
-      return this.authenticationService.findByPhoneNumber(
-        signUpDto.phoneNumber,
-      );
+      return this.authenticationService.findByPhoneNumber(phoneNumber);
     })();
 
     return account$.pipe(
       concatMap((account) => {
-        if (account) {
-          throw new BadRequestException();
+        if (account && !account.isPending) {
+          throw new BadRequestException('Already exsists.');
         }
 
-        if (signUpDto.email) {
+        if (account.isBlock) {
+          throw new UnauthorizedException();
+        }
+
+        if (account.isPending) {
+          this.authenticationService.afterSignUp(account);
+          return of(account.id);
+        }
+
+        if (email) {
           return this.authenticationService.signUpByEmail(
-            signUpDto.name,
-            signUpDto.email,
-            signUpDto.password,
+            name,
+            email,
+            password,
           );
         }
 
         return this.authenticationService.signUpByPhoneNumber(
-          signUpDto.name,
-          signUpDto.phoneNumber,
-          signUpDto.password,
+          name,
+          phoneNumber,
+          password,
         );
       }),
     );
