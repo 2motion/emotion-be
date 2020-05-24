@@ -148,9 +148,9 @@ export class AuthenticationController
         }
 
         if (account && account.isPending) {
-          (() => {
+          return (() => {
             if (email) {
-              this.authenticationService.updateExistsAccountWhenSignUpByEmail(
+              return this.authenticationService.updateExistsAccountWhenSignUpByEmail(
                 account,
                 name,
                 email,
