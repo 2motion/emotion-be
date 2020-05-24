@@ -89,7 +89,7 @@ export class AuthenticationService
           throw new BadRequestException('잘 못된 인증 요청 입니다.');
         }
 
-        if (verifyEntity.expiredAt <= Number(moment().format('x'))) {
+        if (moment().isAfter(verifyEntity.expiredAt)) {
           throw new BadRequestException('인증 시간이 만료되었습니다.');
         }
 
@@ -205,8 +205,6 @@ export class AuthenticationService
       ),
     );
   }
-
-  public ableToSendSms(phoneNumber: string) {}
 
   public sendVerifyEmail(accountEmailAddress: string, verifyHash: number) {
     const mailClient = new EmailUtil(
