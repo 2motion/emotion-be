@@ -21,6 +21,9 @@ import EmailUtil from '@app/util/email.util';
 import SmsUtil from '@app/util/sms.util';
 import * as moment from 'moment';
 import SignUpModel from './model/sign-up.model';
+import { LoginHistoryEntity } from '@app/entities/login-history.entity';
+import { SmsHistoryEntity } from '@app/entities/sms-history.entity';
+import SmsType from '@app/constants/sms-type';
 
 @Injectable()
 export class AuthenticationService
@@ -32,12 +35,25 @@ export class AuthenticationService
     private readonly accountRepository: typeof AccountEntity,
     @Inject('ACCOUNT_VERFIY_REPOSITORY')
     private readonly accountVerfiyRepository: typeof AccountVerfiyEntity,
+    @Inject('LOGIN_HISTORY_REPOSITORY')
+    private readonly loginHistoryRepository: typeof LoginHistoryEntity,
+    @Inject('SMS_HISTORY_REPOSITORY')
+    private readonly smsHistoryRepository: typeof SmsHistoryEntity,
     private readonly configService: ConfigService,
     @InjectEventEmitter() private readonly emitter: AppEventEmitter,
   ) {}
 
   public onModuleDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  public saveLoginHistory(accountId: number, isFailed: boolean = false) {
+    return from(
+      this.loginHistoryRepository.create({
+        accountId,
+        isFailed,
+      }),
+    );
   }
 
   public createAccessToken(account: AccountEntity): string {
@@ -160,15 +176,37 @@ export class AuthenticationService
     const PNF = require('google-libphonenumber').PhoneNumberFormat;
     const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
     const number = phoneUtil.parseAndKeepRawInput(phoneNumber, 'KR');
+    const maximumDailySms = 3;
 
-    return of(
-      smsClient.send({
-        Message: `[Gamstagram] 인증번호는 ${verifyHash} 입니다.`,
-        MessageStructure: 'string',
-        PhoneNumber: phoneUtil.format(number, PNF.E164),
+    return from(
+      this.smsHistoryRepository.count({
+        where: { phoneNumber, type: SmsType.Authentication },
       }),
+    ).pipe(
+      map((sentCount) => {
+        if (sentCount > maximumDailySms) {
+          throw new BadRequestException('일일 최대 발송 수를 초과했습니다.');
+        }
+        return smsClient.send({
+          Message: `[Gamstagram] 인증번호는 ${verifyHash} 입니다.`,
+          MessageStructure: 'string',
+          PhoneNumber: phoneUtil.format(number, PNF.E164),
+        });
+      }),
+      tap(() =>
+        this.subscriptions.push(
+          from(
+            this.smsHistoryRepository.create({
+              phoneNumber,
+              type: SmsType.Authentication,
+            }),
+          ).subscribe(),
+        ),
+      ),
     );
   }
+
+  public ableToSendSms(phoneNumber: string) {}
 
   public sendVerifyEmail(accountEmailAddress: string, verifyHash: number) {
     const mailClient = new EmailUtil(
@@ -248,7 +286,7 @@ export class AuthenticationService
       concatMap((account) => {
         return this.createVerifyHashKeyAndSave(account.id).pipe(
           tap(({ hashKey }) => this.afterSignUp(account, hashKey)),
-          map(({ id, hashKeyPair, hashKey, expiredAt }) => {
+          map(({ id, hashKeyPair, expiredAt }) => {
             return {
               verifyId: id,
               hashKeyPair,
@@ -304,7 +342,7 @@ export class AuthenticationService
       concatMap((account) => {
         return this.createVerifyHashKeyAndSave(account.id).pipe(
           tap(({ hashKey }) => this.afterSignUp(account, hashKey)),
-          map(({ id, hashKeyPair, hashKey, expiredAt }) => {
+          map(({ id, hashKeyPair, expiredAt }) => {
             return {
               verifyId: id,
               hashKeyPair,
@@ -331,7 +369,7 @@ export class AuthenticationService
       concatMap((account) => {
         return this.createVerifyHashKeyAndSave(account.id).pipe(
           tap(({ hashKey }) => this.afterSignUp(account, hashKey)),
-          map(({ id, hashKeyPair, hashKey, expiredAt }) => {
+          map(({ id, hashKeyPair, expiredAt }) => {
             return {
               verifyId: id,
               hashKeyPair,

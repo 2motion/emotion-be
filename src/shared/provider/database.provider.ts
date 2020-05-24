@@ -6,6 +6,7 @@ import { LoginHistoryEntity } from '@app/entities/login-history.entity';
 import { ArticleFileEntity } from '@app/entities/article-file.entity';
 import { FileEntity } from '@app/entities/file.entity';
 import { AccountVerfiyEntity } from '@app/entities/account-verfiy.entity';
+import { SmsHistoryEntity } from '@app/entities/sms-history.entity';
 
 export const databaseProviders = [
   {
@@ -28,6 +29,7 @@ export const databaseProviders = [
         LoginHistoryEntity,
         FileEntity,
         ArticleFileEntity,
+        SmsHistoryEntity,
       ]);
 
       await sequelize.authenticate();

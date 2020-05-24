@@ -8,19 +8,21 @@ import {
   AutoIncrement,
   PrimaryKey,
   AllowNull,
+  Default,
 } from 'sequelize-typescript';
 
 @Table
-export class LoginHistoryEntity extends Model<LoginHistoryEntity> {
+export class SmsHistoryEntity extends Model<SmsHistoryEntity> {
   @AutoIncrement
   @PrimaryKey
   @Column(DataType.BIGINT)
   public id: number;
 
   @AllowNull(false)
-  @Column(DataType.BIGINT)
-  public accountId: string;
+  @Column(DataType.CHAR)
+  public phoneNumber: string;
 
+  @Default(0)
   @AllowNull(false)
   @Column(DataType.TINYINT())
   public isFailed: number;

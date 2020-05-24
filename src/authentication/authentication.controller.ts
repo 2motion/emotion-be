@@ -6,12 +6,13 @@ import {
   HttpCode,
   HttpStatus,
   UnauthorizedException,
+  OnModuleDestroy,
 } from '@nestjs/common';
 import SignUpDto from './dto/sign-up.dto';
 import { AuthenticationService } from './authentication.service';
 import CreateAccessTokenDto from './dto/create-access-token.dto';
 import AuthenticationControllerInterface from './interfaces/authentication.controller.interface';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { map, concatMap } from 'rxjs/operators';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import ArticleListModel from '@app/article/model/article-list.model';
@@ -23,10 +24,15 @@ import SignUpModel from './model/sign-up.model';
 @ApiTags('authentication')
 @Controller('authentication')
 export class AuthenticationController
-  implements AuthenticationControllerInterface {
+  implements AuthenticationControllerInterface, OnModuleDestroy {
+  public readonly subscriptions: Subscription[] = [];
   public constructor(
     private readonly authenticationService: AuthenticationService,
   ) {}
+
+  public onModuleDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -72,9 +78,17 @@ export class AuthenticationController
             account.password,
           )
         ) {
+          this.subscriptions.push(
+            this.authenticationService
+              .saveLoginHistory(account.id, true)
+              .subscribe(),
+          );
           throw new BadRequestException();
         }
 
+        this.subscriptions.push(
+          this.authenticationService.saveLoginHistory(account.id).subscribe(),
+        );
         return this.authenticationService.createAccessToken(account);
       }),
     );
