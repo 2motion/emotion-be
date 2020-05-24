@@ -120,6 +120,10 @@ export class AuthenticationController
   public signUp(
     @Body() { name, email, phoneNumber, password }: SignUpDto,
   ): Observable<SignUpModel> {
+    if (!email && !phoneNumber) {
+      throw new BadRequestException('이메일 또는 핸드폰 번호를 입력해주세요.');
+    }
+
     const account$ = (() => {
       if (email) {
         return this.authenticationService.findByEmail(email);
