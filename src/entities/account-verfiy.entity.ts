@@ -28,13 +28,26 @@ export class AccountVerfiyEntity extends Model<AccountVerfiyEntity> {
   public accountId: number;
 
   @AllowNull(false)
-  @Column(DataType.TINYINT)
+  @Column(DataType.INTEGER('4'))
   public hashKey: number;
+
+  @AllowNull(false)
+  @Column(DataType.CHAR)
+  public hashKeyPair: string;
 
   @Default(0)
   @AllowNull(false)
   @Column(DataType.TINYINT)
   public isVerified: number;
+
+  @AllowNull(false)
+  @Column(DataType.INTEGER)
+  public expiredAt: number;
+
+  @Default(0)
+  @AllowNull(false)
+  @Column(DataType.TINYINT)
+  public attempts: number;
 
   @CreatedAt
   @AllowNull(false)

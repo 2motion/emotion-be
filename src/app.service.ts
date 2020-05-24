@@ -10,7 +10,6 @@ export class AppService implements OnModuleInit {
 
   public onModuleInit(): void {
     this.emitter.on('slackNotification', async (webhook, template) => {
-      console.log('@@fuck');
       await webhook.send(template);
     });
   }

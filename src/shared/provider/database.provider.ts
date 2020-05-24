@@ -31,6 +31,7 @@ export const databaseProviders = [
       ]);
 
       await sequelize.authenticate();
+      // await sequelize.sync({force: true});
 
       return sequelize;
     },

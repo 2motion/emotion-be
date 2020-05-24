@@ -18,6 +18,7 @@ import ArticleListModel from '@app/article/model/article-list.model';
 import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
 import VerifyDto from './dto/verify.dto';
 import { IpAddress } from '@app/shared/decorator/request-ip.decorator';
+import SignUpModel from './model/sign-up.model';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -88,23 +89,23 @@ export class AuthenticationController
   @CommonResponseReceiptDecorator()
   @Post('verify')
   public verify(
-    @Body() {accountId, hashKey}: VerifyDto,
-    @IpAddress() ipAddress: string
+    @Body() { verifyId, hashKey, hashKeyPair }: VerifyDto,
+    @IpAddress() ipAddress: string,
   ): Observable<void> {
-    return this.authenticationService.verify(accountId, hashKey);
+    return this.authenticationService.verify(verifyId, hashKey, hashKeyPair);
   }
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    type: Number,
+    type: SignUpModel,
   })
   @ApiOperation({ summary: '회원가입을 진행한다.' })
   @CommonResponseReceiptDecorator()
   @Post('sign-up')
   public signUp(
     @Body() { name, email, phoneNumber, password }: SignUpDto,
-  ): Observable<number> {
+  ): Observable<SignUpModel> {
     const account$ = (() => {
       if (email) {
         return this.authenticationService.findByEmail(email);
@@ -114,6 +115,12 @@ export class AuthenticationController
 
     return account$.pipe(
       concatMap((account) => {
+        if (email && phoneNumber) {
+          throw new BadRequestException(
+            '이메일 또는 핸드폰 번호 둘 중 하나를 통해 가입해주세요.',
+          );
+        }
+
         if (account && !account.isPending) {
           throw new BadRequestException('Already exsists.');
         }
@@ -123,8 +130,22 @@ export class AuthenticationController
         }
 
         if (account && account.isPending) {
-          this.authenticationService.afterSignUp(account);
-          return of(account.id);
+          (() => {
+            if (email) {
+              this.authenticationService.updateExistsAccountWhenSignUpByEmail(
+                account,
+                name,
+                email,
+                password,
+              );
+            }
+            return this.authenticationService.updateExistsAccountWhenSignUpByPhoneNumber(
+              account,
+              name,
+              phoneNumber,
+              password,
+            );
+          })();
         }
 
         if (email) {

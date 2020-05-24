@@ -1701,7 +1701,7 @@ const swaggerBootstrap = (app: INestApplication) => {
     include: [ArticleModule, AuthenticationModule],
   });
 
-  SwaggerModule.setup('/', app, document, {
+  SwaggerModule.setup('swagger', app, document, {
     customSiteTitle: 'Gamstagram REST API',
     customCss: customCss(),
   });

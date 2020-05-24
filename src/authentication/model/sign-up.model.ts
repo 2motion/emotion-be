@@ -1,26 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import * as moment from 'moment';
+import { Type } from 'class-transformer';
 
-class VerifyDto {
+class SignUpModel {
   @ApiProperty({
     required: true,
     example: 1,
   })
   public verifyId: number;
 
+  @Type(() => Number)
   @ApiProperty({
-    description: 'HashKey',
     required: true,
+    example: moment(new Date()).format('x'),
   })
-  @IsNotEmpty()
-  public hashKey: number;
+  public expiredAt: number;
 
   @ApiProperty({
-    description: 'HashKey',
     required: true,
   })
-  @IsNotEmpty()
   public hashKeyPair: string;
 }
 
-export default VerifyDto;
+export default SignUpModel;

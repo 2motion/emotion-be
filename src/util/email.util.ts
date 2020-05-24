@@ -10,14 +10,18 @@ class EmailUtil {
 
   public send(params: SES.Types.SendEmailRequest) {
     const instnace = this.getInstance();
-    return instnace.sendEmail(params);
+    return instnace.sendEmail(params, (err) => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 
   public getInstance(): SES {
     return new SES({
       accessKeyId: this.accessKeyId,
       secretAccessKey: this.secretAccessKey,
-      region: 'ap-northeast-2',
+      region: 'us-east-1',
     });
   }
 }

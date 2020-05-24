@@ -1,4 +1,5 @@
 import { SNS } from 'aws-sdk';
+import { bindNodeCallback } from 'rxjs';
 
 class SmsUtil {
   private accessKeyId: string;
@@ -10,14 +11,18 @@ class SmsUtil {
   }
 
   public send(param: SNS.Types.PublishInput) {
-    return this.getInstance().publish(param);
+    return this.getInstance().publish(param, (err) => {
+      if (err) {
+        throw err;
+      }
+    });
   }
 
   public getInstance() {
     return new SNS({
       accessKeyId: this.accessKeyId,
       secretAccessKey: this.secretAccessKey,
-      region: 'ap-northeast-2',
+      region: 'us-east-1',
     });
   }
 }

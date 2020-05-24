@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -12,6 +13,7 @@ import { ValidationPipe } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
 import * as requestIp from 'request-ip';
 import swaggerBootstrap from '@app/bootstrap/swagger.bootstrap';
+import { eventContext } from 'aws-serverless-express/middleware';
 
 let cachedServer: Server;
 
@@ -25,6 +27,7 @@ export const bootstrapServer = async (): Promise<Server> => {
   const app = await NestFactory.create(AppModule, adapter);
 
   app.enableCors();
+  app.use(eventContext());
   app.use(helmet());
   app.use(compression());
   app.use(requestIp.mw());
@@ -44,6 +47,9 @@ export const handler: APIGatewayProxyHandler = async (
   if (event['source'] === 'serverless-plugin-warmup') {
     console.log('WarmUp - Lambda is warm!');
     return callback(null);
+  }
+  if (event.path === '/swagger') {
+    event.path = '/swagger/';
   }
   console.log('proccess env', process.env);
   if (!cachedServer) {
