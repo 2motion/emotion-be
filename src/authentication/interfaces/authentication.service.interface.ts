@@ -1,13 +1,15 @@
 import { Observable } from 'rxjs';
 import { AccountEntity } from '@app/entities/account.entity';
 import SignUpModel from '../model/sign-up.model';
+import AccessTokenModel from '../model/access-token.model';
 
 interface AuthenticationServiceInterface {
   findByPhoneNumber(phoneNumber: string): Observable<AccountEntity>;
   findByEmail(email: string): Observable<AccountEntity>;
-  createAccessToken(account: AccountEntity): string;
+  createAccessToken(account: AccountEntity): AccessTokenModel;
   encryptedPassword(password: string): string;
   findById(accountId: number): Observable<AccountEntity>;
+  checkNameExists(name: string): Observable<number>;
   signUpByPhoneNumber(
     name: string,
     phoneNumber: string,

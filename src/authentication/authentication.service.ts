@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { AccountEntity } from '@app/entities/account.entity';
 import { from, Observable, Subscription, forkJoin, of } from 'rxjs';
-import { pluck, tap, map, concatMap } from 'rxjs/operators';
+import { tap, map, concatMap } from 'rxjs/operators';
 import AuthenticationServiceInterface from '@app/authentication/interfaces/authentication.service.interface';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -24,6 +24,7 @@ import SignUpModel from './model/sign-up.model';
 import { LoginHistoryEntity } from '@app/entities/login-history.entity';
 import { SmsHistoryEntity } from '@app/entities/sms-history.entity';
 import SmsType from '@app/constants/sms-type';
+import AccessTokenModel from './model/access-token.model';
 
 @Injectable()
 export class AuthenticationService
@@ -56,21 +57,32 @@ export class AuthenticationService
     );
   }
 
-  public createAccessToken(account: AccountEntity): string {
-    return jwt.sign(
+  public checkNameExists(name: string): Observable<number> {
+    return from(this.accountRepository.count({ where: { name } }));
+  }
+
+  public createAccessToken(account: AccountEntity): AccessTokenModel {
+    const expiresIn = 60 * 60 * (24 * 3);
+    const expiredAt = Number(moment().add(expiresIn, 'seconds').format('x'));
+    const token = jwt.sign(
       { accountId: account.id },
       this.configService.get<string>('ACCESS_TOKEN_PRIVATE_KEY'),
       {
-        expiresIn: 60 * 60 * (24 * 3),
+        expiresIn,
       },
     );
+
+    return {
+      token,
+      expiredAt,
+    };
   }
 
   public verify(
     verifyId: number,
     hashKey: number,
     hashKeyPair: string,
-  ): Observable<void> {
+  ): Observable<AccessTokenModel> {
     return from(
       this.accountVerfiyRepository.findOne({
         where: {
@@ -89,7 +101,7 @@ export class AuthenticationService
           throw new BadRequestException('잘 못된 인증 요청 입니다.');
         }
 
-        if (moment().isAfter(verifyEntity.expiredAt)) {
+        if (moment().isBefore(verifyEntity.expiredAt)) {
           throw new BadRequestException('인증 시간이 만료되었습니다.');
         }
 
@@ -110,11 +122,11 @@ export class AuthenticationService
 
         return from(
           verifyEntity.account.update({
-            isPending: true,
+            isPending: 0,
           }),
         ).pipe(concatMap(() => verifyEntity.update({ isVerified: 1 })));
       }),
-      map(() => {}),
+      map((verifyEntity) => this.createAccessToken(verifyEntity.account)),
     );
   }
 

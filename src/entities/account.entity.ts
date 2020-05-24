@@ -10,6 +10,7 @@ import {
   PrimaryKey,
   AllowNull,
   Default,
+  Unique,
 } from 'sequelize-typescript';
 
 @Table
@@ -20,6 +21,7 @@ export class AccountEntity extends Model<AccountEntity> {
   public id: number;
 
   @AllowNull(false)
+  @Unique
   @Column(DataType.CHAR(30))
   public name: string;
 

@@ -15,11 +15,11 @@ import AuthenticationControllerInterface from './interfaces/authentication.contr
 import { Observable, of, Subscription } from 'rxjs';
 import { map, concatMap } from 'rxjs/operators';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
-import ArticleListModel from '@app/article/model/article-list.model';
 import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
 import VerifyDto from './dto/verify.dto';
 import { IpAddress } from '@app/shared/decorator/request-ip.decorator';
 import SignUpModel from './model/sign-up.model';
+import AccessTokenModel from './model/access-token.model';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -44,7 +44,7 @@ export class AuthenticationController
   @Post('token')
   public createAccessToken(
     @Body() createAccessTokenDto: CreateAccessTokenDto,
-  ): Observable<string> {
+  ): Observable<AccessTokenModel> {
     const account$ = (() => {
       if (createAccessTokenDto.email) {
         return this.authenticationService.findByEmail(
@@ -105,7 +105,7 @@ export class AuthenticationController
   public verify(
     @Body() { verifyId, hashKey, hashKeyPair }: VerifyDto,
     @IpAddress() ipAddress: string,
-  ): Observable<void> {
+  ): Observable<AccessTokenModel> {
     return this.authenticationService.verify(verifyId, hashKey, hashKeyPair);
   }
 
@@ -166,18 +166,26 @@ export class AuthenticationController
           })();
         }
 
-        if (email) {
-          return this.authenticationService.signUpByEmail(
-            name,
-            email,
-            password,
-          );
-        }
+        return this.authenticationService.checkNameExists(name).pipe(
+          concatMap((exists) => {
+            if (exists) {
+              throw new BadRequestException('이미 존재하는 이름 입니다.');
+            }
 
-        return this.authenticationService.signUpByPhoneNumber(
-          name,
-          phoneNumber,
-          password,
+            if (email) {
+              return this.authenticationService.signUpByEmail(
+                name,
+                email,
+                password,
+              );
+            }
+
+            return this.authenticationService.signUpByPhoneNumber(
+              name,
+              phoneNumber,
+              password,
+            );
+          }),
         );
       }),
     );

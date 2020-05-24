@@ -22,6 +22,9 @@ export class SmsHistoryEntity extends Model<SmsHistoryEntity> {
   @Column(DataType.CHAR)
   public phoneNumber: string;
 
+  @Column(DataType.TINYINT())
+  public type: number;
+
   @Default(0)
   @AllowNull(false)
   @Column(DataType.TINYINT())
