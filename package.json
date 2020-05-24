@@ -33,10 +33,10 @@
     ]
   },
   "dependencies": {
-    "@nestjs/common": "7.0.13",
+    "@nestjs/common": "7.1.0",
     "@nestjs/config": "0.5.0",
-    "@nestjs/core": "7.0.13",
-    "@nestjs/platform-express": "7.0.13",
+    "@nestjs/core": "7.1.0",
+    "@nestjs/platform-express": "7.1.0",
     "@nestjs/sequelize": "0.1.0",
     "@nestjs/swagger": "4.5.6",
     "@sentry/node": "5.15.5",
@@ -70,7 +70,7 @@
     "@commitlint/config-conventional": "8.3.4",
     "@nestjs/cli": "7.1.5",
     "@nestjs/schematics": "7.0.0",
-    "@nestjs/testing": "7.0.13",
+    "@nestjs/testing": "7.1.0",
     "@types/aws-lambda": "8.10.51",
     "@types/bcryptjs": "2.4.2",
     "@types/dotenv": "8.2.0",
