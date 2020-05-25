@@ -1,16 +1,24 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ArticleEntity } from '../entities/article.entity';
 import CreateArticleDto from './dto/create-article.dto';
-import { from, Observable } from 'rxjs';
+import { from, Observable, forkJoin, of } from 'rxjs';
 import ArticleModel from './model/article.model';
-import { map } from 'rxjs/operators';
+import { map, concatAll, concatMap } from 'rxjs/operators';
 import ArticleServiceInterface from './interfaces/article.service.interface';
+import FileStorageUtil from '@app/util/file-storage.util';
+import { FileEntity } from '@app/entities/file.entity';
+import { ArticleFileEntity } from '@app/entities/article-file.entity';
+import ArticleFileType from '@app/constants/article-file-type';
 
 @Injectable()
 export class ArticleService implements ArticleServiceInterface {
   public constructor(
     @Inject('ARTICLE_REPOSITORY')
     private articleRepository: typeof ArticleEntity,
+    @Inject('ARTICLE_FILE_REPOSITORY')
+    private articleFileRepository: typeof ArticleFileEntity,
+    @Inject('FILE_REPOSITORY')
+    private fileRepository: typeof FileEntity,
   ) {}
 
   public findAndCountAll(): Observable<{
@@ -48,7 +56,7 @@ export class ArticleService implements ArticleServiceInterface {
         ...createArticleDto,
         ...{ accountId },
       }),
-    ).pipe(map(articleEntity => this.convert(articleEntity)));
+    ).pipe(map((articleEntity) => this.convert(articleEntity)));
   }
 
   public convert(articleEntity: ArticleEntity): ArticleModel {
@@ -59,5 +67,37 @@ export class ArticleService implements ArticleServiceInterface {
     article.body = articleEntity.getDataValue('body');
 
     return article;
+  }
+
+  public uploadFile(
+    articleId: number,
+    file: Express.Multer.File,
+  ): Observable<ArticleFileEntity> {
+    const isImage = file.originalname.match(/.(jpg|jpeg|png|gif)$/i);
+    return from(
+      FileStorageUtil.saveToRemote(file.originalname, file.buffer),
+    ).pipe(
+      concatMap((hashKey) => {
+        return from(
+          this.fileRepository.create({
+            hashKey,
+            name: file.originalname,
+          }),
+        );
+      }),
+      concatMap((fileEntity) =>
+        from(
+          this.articleFileRepository.create({
+            fileId: fileEntity.id,
+            articleId,
+            type: isImage ? 'image' : 'audio',
+          }),
+        ),
+      ),
+    );
+  }
+
+  public uploadFiles(articleId: number, files: Express.Multer.File[]) {
+    return forkJoin(files.map((file) => this.uploadFile(articleId, file)));
   }
 }

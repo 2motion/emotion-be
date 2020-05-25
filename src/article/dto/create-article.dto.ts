@@ -16,12 +16,6 @@ class CreateArticleDto {
   })
   @IsOptional()
   public body?: string;
-
-  @ApiProperty({
-    description: '첨부할 사진',
-  })
-  @IsOptional()
-  public photos: File[];
 }
 
 export default CreateArticleDto;

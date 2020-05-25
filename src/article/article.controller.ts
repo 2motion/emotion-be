@@ -8,6 +8,8 @@ import {
   UnauthorizedException,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import ArticleControllerInterface from './interfaces/article.controller.interface';
 import { ArticleService } from './article.service';
@@ -18,15 +20,18 @@ import { DecodedToken } from '@app/shared/decorator/decoded-token.decorator';
 import { Observable } from 'rxjs';
 import ArticleModel from './model/article.model';
 import { AuthenticationService } from '@app/authentication/authentication.service';
-import { concatMap } from 'rxjs/operators';
+import { concatMap, map } from 'rxjs/operators';
+import * as mimeType from 'mime-types';
 import {
   ApiResponse,
   ApiOperation,
   ApiTags,
   ApiBearerAuth,
+  ApiConsumes,
 } from '@nestjs/swagger';
 import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
 import ArticleListModel from './model/article-list.model';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('articles')
 @Controller('articles')
@@ -53,6 +58,40 @@ export class ArticleController implements ArticleControllerInterface {
     status: HttpStatus.CREATED,
     type: ArticleModel,
   })
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        {
+          name: 'images',
+          maxCount: 3,
+        },
+        {
+          name: 'audio',
+          maxCount: 1,
+        },
+      ],
+      {
+        fileFilter: (_req: Request, file, cb) => {
+          const extension = mimeType.extension(file.mimetype) as string;
+          console.log('extension', extension);
+
+          if (
+            !['jpg', 'jpeg', 'png', 'gif', 'mp3', 'mp4', 'mpga'].includes(
+              extension,
+            )
+          ) {
+            return cb(
+              new BadRequestException('지원하지 않는 확장자 입니다.'),
+              false,
+            );
+          }
+
+          return cb(null, true);
+        },
+      },
+    ),
+  )
+  @ApiConsumes('multipart/form-data')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Article 정보를 생성한다.' })
   @CommonResponseReceiptDecorator()
@@ -61,6 +100,14 @@ export class ArticleController implements ArticleControllerInterface {
   public create(
     @Body() createArticleDto: CreateArticleDto,
     @DecodedToken() { accountId }: JwtDecodedInterface,
+    @UploadedFiles()
+    {
+      images,
+      audio,
+    }: {
+      images?: Express.Multer.File[];
+      audio?: Express.Multer.File;
+    },
   ): Observable<ArticleModel> {
     return this.authenticationService.findById(accountId).pipe(
       concatMap((account) => {
@@ -72,6 +119,18 @@ export class ArticleController implements ArticleControllerInterface {
           throw new UnauthorizedException();
         }
 
+        if (images) {
+          return this.articleService.create(createArticleDto, accountId).pipe(
+            concatMap((articleEntity) => {
+              return this.articleService
+                .uploadFiles(articleEntity.id, {
+                  ...images,
+                  ...audio,
+                })
+                .pipe(map(() => articleEntity));
+            }),
+          );
+        }
         return this.articleService.create(createArticleDto, accountId);
       }),
     );

@@ -7,6 +7,13 @@ interface ArticleControllerInterface {
   create(
     createArticleDto: CreateArticleDto,
     { accountId }: JwtDecodedInterface,
+    {
+      images,
+      audio,
+    }: {
+      images?: Express.Multer.File[];
+      audio?: Express.Multer.File;
+    },
   ): Observable<ArticleModel>;
 }
 
