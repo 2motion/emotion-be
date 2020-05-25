@@ -1,5 +1,8 @@
-import { createParamDecorator } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-export const DecodedToken = createParamDecorator((data: string, req) => {
-  return data ? req.decodedToken && req.decodedToken[data] : req.decodedToken;
-});
+export const DecodedToken = createParamDecorator(
+  (_data: string, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.decodedToken;
+  },
+);

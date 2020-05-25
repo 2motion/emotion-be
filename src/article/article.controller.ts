@@ -19,7 +19,12 @@ import { Observable } from 'rxjs';
 import ArticleModel from './model/article.model';
 import { AuthenticationService } from '@app/authentication/authentication.service';
 import { concatMap } from 'rxjs/operators';
-import { ApiResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiResponse,
+  ApiOperation,
+  ApiTags,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
 import ArticleListModel from './model/article-list.model';
 
@@ -48,6 +53,7 @@ export class ArticleController implements ArticleControllerInterface {
     status: HttpStatus.CREATED,
     type: ArticleModel,
   })
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Article 정보를 생성한다.' })
   @CommonResponseReceiptDecorator()
   @UseGuards(AuthGuard)
