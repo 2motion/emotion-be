@@ -12,7 +12,7 @@ import SignUpDto from './dto/sign-up.dto';
 import { AuthenticationService } from './authentication.service';
 import CreateAccessTokenDto from './dto/create-access-token.dto';
 import AuthenticationControllerInterface from './interfaces/authentication.controller.interface';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, concatMap } from 'rxjs/operators';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
@@ -104,7 +104,7 @@ export class AuthenticationController
   @Post('verify')
   public verify(
     @Body() { verifyId, hashKey, hashKeyPair }: VerifyDto,
-    @IpAddress() ipAddress: string,
+    @IpAddress() _ipAddress: string,
   ): Observable<AccessTokenModel> {
     return this.authenticationService.verify(verifyId, hashKey, hashKeyPair);
   }

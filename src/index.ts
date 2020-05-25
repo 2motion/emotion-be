@@ -39,6 +39,7 @@ export const bootstrapServer = async (): Promise<Server> => {
   return awsServerlessExpress.createServer(expressApp);
 };
 
+// @ts-ignore
 export const handler: APIGatewayProxyHandler = async (
   event,
   context,

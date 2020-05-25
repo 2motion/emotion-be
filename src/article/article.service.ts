@@ -1,14 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ArticleEntity } from '../entities/article.entity';
 import CreateArticleDto from './dto/create-article.dto';
-import { from, Observable, forkJoin, of } from 'rxjs';
+import { from, Observable, forkJoin } from 'rxjs';
 import ArticleModel from './model/article.model';
-import { map, concatAll, concatMap } from 'rxjs/operators';
+import { map, concatMap } from 'rxjs/operators';
 import ArticleServiceInterface from './interfaces/article.service.interface';
 import FileStorageUtil from '@app/util/file-storage.util';
 import { FileEntity } from '@app/entities/file.entity';
 import { ArticleFileEntity } from '@app/entities/article-file.entity';
-import ArticleFileType from '@app/constants/article-file-type';
 
 @Injectable()
 export class ArticleService implements ArticleServiceInterface {

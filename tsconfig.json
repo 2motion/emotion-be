@@ -12,16 +12,25 @@
         "src/*"
       ]
     },
-    "skipLibCheck": true,
     "allowSyntheticDefaultImports": false,
     "resolveJsonModule": true,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2017",
+    "skipLibCheck": true,
+    "target": "es6",
     "sourceMap": true,
+    "inlineSources": true,
+    "pretty": true,
     "outDir": "./dist",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": false,
+    "forceConsistentCasingInFileNames": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "incremental": true
   },
   "exclude": ["node_modules", "dist"]

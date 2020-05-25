@@ -1,5 +1,4 @@
 import { SNS } from 'aws-sdk';
-import { bindNodeCallback } from 'rxjs';
 
 class SmsUtil {
   private accessKeyId: string;
