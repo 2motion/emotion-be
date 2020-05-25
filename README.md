@@ -10,6 +10,7 @@
   <a href='https://coveralls.io/github/2motion/emotion-be?branch=master'>
     <img src='https://coveralls.io/repos/github/2motion/emotion-be/badge.svg?branch=master' alt='Coverage Status' />
   </a>
+  <a href="https://deepscan.io/dashboard#view=project&tid=4889&pid=11864&bid=176903"><img src="https://deepscan.io/api/teams/4889/projects/11864/branches/176903/badge/grade.svg" alt="DeepScan grade"></a>
 </p>
 
 
