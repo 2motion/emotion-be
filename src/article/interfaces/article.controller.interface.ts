@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import ArticleModel from '../model/article.model';
 
 interface ArticleControllerInterface {
+  findAndCountAll(): Observable<{ count: number; rows: ArticleModel[] }>;
   create(
     createArticleDto: CreateArticleDto,
     { accountId }: JwtDecodedInterface,

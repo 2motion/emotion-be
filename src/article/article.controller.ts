@@ -53,7 +53,10 @@ export class ArticleController extends BaseController
   @ApiOperation({ summary: 'Article 정보를 응답한다.' })
   @CommonResponseReceiptDecorator()
   @Get()
-  public findAndCountAll() {
+  public findAndCountAll(): Observable<{
+    count: number;
+    rows: ArticleModel[];
+  }> {
     return this.articleService.findAndCountAll();
   }
 

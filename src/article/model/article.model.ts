@@ -26,6 +26,16 @@ class ArticleModel {
     description: '업데이트 시간',
   })
   public updatedAt: number;
+
+  @ApiProperty({
+    description: '이미지',
+  })
+  public images?: string[];
+
+  @ApiProperty({
+    description: '오디오',
+  })
+  public audio?: string;
 }
 
 export default ArticleModel;

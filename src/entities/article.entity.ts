@@ -12,8 +12,10 @@ import {
   BelongsTo,
   ForeignKey,
   Default,
+  HasMany,
 } from 'sequelize-typescript';
 import { AccountEntity } from './account.entity';
+import { ArticleFileEntity } from './article-file.entity';
 
 @Table
 export class ArticleEntity extends Model<ArticleEntity> {
@@ -66,4 +68,10 @@ export class ArticleEntity extends Model<ArticleEntity> {
 
   @BelongsTo(() => AccountEntity)
   public account: AccountEntity;
+
+  @HasMany(() => ArticleFileEntity, {
+    onDelete: 'CASCADE',
+    hooks: true,
+  })
+  public files: ArticleFileEntity[];
 }

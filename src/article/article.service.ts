@@ -34,6 +34,16 @@ export class ArticleService implements ArticleServiceInterface {
           'updatedAt',
           'isEnabledComment',
         ],
+        include: [
+          {
+            model: this.articleFileRepository,
+            include: [
+              {
+                model: this.fileRepository,
+              },
+            ],
+          },
+        ],
       }),
     ).pipe(
       map(({ rows, count }) => {
@@ -64,6 +74,11 @@ export class ArticleService implements ArticleServiceInterface {
     article.id = articleEntity.getDataValue('id');
     article.title = articleEntity.getDataValue('title');
     article.body = articleEntity.getDataValue('body');
+    article.images = [];
+
+    for (let i = 0; i < articleEntity.files.length; i++) {
+      article.images.push(articleEntity.files[i].file.hashKey);
+    }
 
     return article;
   }

@@ -10,6 +10,7 @@ import {
   PrimaryKey,
   AllowNull,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { ArticleEntity } from './article.entity';
 import { FileEntity } from './file.entity';
@@ -50,4 +51,7 @@ export class ArticleFileEntity extends Model<ArticleFileEntity> {
   @AllowNull(true)
   @Column(DataType.DATE)
   public deleteAt: Date;
+
+  @BelongsTo(() => FileEntity)
+  public file: FileEntity;
 }
