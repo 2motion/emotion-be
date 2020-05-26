@@ -32,14 +32,18 @@ import {
 import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
 import ArticleListModel from './model/article-list.model';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { BaseController } from '@app/base.controller';
 
 @ApiTags('articles')
 @Controller('articles')
-export class ArticleController implements ArticleControllerInterface {
+export class ArticleController extends BaseController
+  implements ArticleControllerInterface {
   public constructor(
     private readonly articleService: ArticleService,
     private readonly authenticationService: AuthenticationService,
-  ) {}
+  ) {
+    super();
+  }
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -92,10 +96,10 @@ export class ArticleController implements ArticleControllerInterface {
     ),
   )
   @ApiConsumes('multipart/form-data')
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Article 정보를 생성한다.' })
-  @CommonResponseReceiptDecorator()
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @CommonResponseReceiptDecorator()
   @Post()
   public create(
     @Body() createArticleDto: CreateArticleDto,

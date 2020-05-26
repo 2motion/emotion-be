@@ -21,15 +21,18 @@ import { IpAddress } from '@app/shared/decorator/request-ip.decorator';
 import SignUpModel from './model/sign-up.model';
 import AccessTokenModel from './model/access-token.model';
 import ResendVerifyCodeDto from './dto/resend-verify-code.dto';
+import { BaseController } from '@app/base.controller';
 
 @ApiTags('authentication')
 @Controller('authentication')
-export class AuthenticationController
+export class AuthenticationController extends BaseController
   implements AuthenticationControllerInterface, OnModuleDestroy {
   public readonly subscriptions: Subscription[] = [];
   public constructor(
     private readonly authenticationService: AuthenticationService,
-  ) {}
+  ) {
+    super();
+  }
 
   public onModuleDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
