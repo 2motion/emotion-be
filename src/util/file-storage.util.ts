@@ -27,7 +27,6 @@ class FileStorageUtil {
 
     const fileExtName = path.extname(fileName);
 
-    console.log('fileExtName', fileExtName);
     const hashKey = `${Number(
       moment.utc().format('x'),
     )}-${uuidv4()}${fileExtName}`;
@@ -39,6 +38,7 @@ class FileStorageUtil {
           CacheControl: 'max-age=31536000',
           ContentType: mimeType.lookup(fileName) as string,
           Bucket: config.get('AWS_S3_IMAGE_UPLOAD_BUCKET'),
+          ACL: 'public-read',
         },
         (err, _data) => {
           err ? reject(err) : resolve(hashKey);

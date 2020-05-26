@@ -5,6 +5,7 @@ import { ArticleEntity } from '@app/entities/article.entity';
 
 interface ArticleServiceInterface {
   findAndCountAll(): Observable<{ rows: ArticleModel[]; count: number }>;
+  getArticleById(articleId: number): Observable<ArticleModel>;
   create(
     createArticleDto: CreateArticleDto,
     accountId: number,

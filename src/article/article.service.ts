@@ -8,16 +8,18 @@ import ArticleServiceInterface from './interfaces/article.service.interface';
 import FileStorageUtil from '@app/util/file-storage.util';
 import { FileEntity } from '@app/entities/file.entity';
 import { ArticleFileEntity } from '@app/entities/article-file.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ArticleService implements ArticleServiceInterface {
   public constructor(
     @Inject('ARTICLE_REPOSITORY')
-    private articleRepository: typeof ArticleEntity,
+    private readonly articleRepository: typeof ArticleEntity,
     @Inject('ARTICLE_FILE_REPOSITORY')
-    private articleFileRepository: typeof ArticleFileEntity,
+    private readonly articleFileRepository: typeof ArticleFileEntity,
     @Inject('FILE_REPOSITORY')
-    private fileRepository: typeof FileEntity,
+    private readonly fileRepository: typeof FileEntity,
+    private readonly configService: ConfigService,
   ) {}
 
   public findAndCountAll(): Observable<{
@@ -56,6 +58,31 @@ export class ArticleService implements ArticleServiceInterface {
     );
   }
 
+  public getArticleById(articleId: number): Observable<ArticleModel> {
+    return from(
+      this.articleRepository.findByPk(articleId, {
+        attributes: [
+          'id',
+          'title',
+          'body',
+          'createdAt',
+          'updatedAt',
+          'isEnabledComment',
+        ],
+        include: [
+          {
+            model: this.articleFileRepository,
+            include: [
+              {
+                model: this.fileRepository,
+              },
+            ],
+          },
+        ],
+      }),
+    ).pipe(map((articleEntity) => this.convert(articleEntity)));
+  }
+
   public create(
     createArticleDto: CreateArticleDto,
     accountId: number,
@@ -76,8 +103,13 @@ export class ArticleService implements ArticleServiceInterface {
     article.body = articleEntity.getDataValue('body');
     article.images = [];
 
-    for (let i = 0; i < articleEntity.files.length; i++) {
-      article.images.push(articleEntity.files[i].file.hashKey);
+    if (articleEntity.files) {
+      for (let i = 0; i < articleEntity.files.length; i++) {
+        const imagePath = `${this.configService.get('STATIC_IMAGE_HOST')}/${
+          articleEntity.files[i].file.hashKey
+        }`;
+        article.images.push(imagePath);
+      }
     }
 
     return article;
@@ -112,6 +144,10 @@ export class ArticleService implements ArticleServiceInterface {
   }
 
   public uploadFiles(articleId: number, files: Express.Multer.File[]) {
-    return forkJoin(files.map((file) => this.uploadFile(articleId, file)));
+    return forkJoin(
+      Object.keys(files).map((fileKey) =>
+        this.uploadFile(articleId, files[fileKey]),
+      ),
+    );
   }
 }

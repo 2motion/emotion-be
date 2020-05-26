@@ -140,6 +140,9 @@ export class ArticleController extends BaseController
         }
         return this.articleService.create(createArticleDto, accountId);
       }),
+      concatMap(({ id }) => {
+        return this.articleService.getArticleById(id);
+      }),
     );
   }
 }
