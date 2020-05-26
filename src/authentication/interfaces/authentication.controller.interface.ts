@@ -14,4 +14,3 @@ interface AuthenticationControllerInterface {
 }
 
 export default AuthenticationControllerInterface;
-``;
