@@ -33,6 +33,7 @@ interface AuthenticationServiceInterface {
     email: string,
     password: string,
   ): Observable<SignUpModel>;
+  resendVerifyCode(verifyId: number, hashKeyPair: string): Observable<void>;
 }
 
 export default AuthenticationServiceInterface;

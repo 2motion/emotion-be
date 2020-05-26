@@ -20,6 +20,7 @@ import VerifyDto from './dto/verify.dto';
 import { IpAddress } from '@app/shared/decorator/request-ip.decorator';
 import SignUpModel from './model/sign-up.model';
 import AccessTokenModel from './model/access-token.model';
+import ResendVerifyCodeDto from './dto/resend-verify-code.dto';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -92,6 +93,20 @@ export class AuthenticationController
         return this.authenticationService.createAccessToken(account);
       }),
     );
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: String,
+  })
+  @ApiOperation({ summary: '계정 인증 코드를 재 발송 한다.' })
+  @CommonResponseReceiptDecorator()
+  @Post('resend-verify-code')
+  public resendVerifyCode(
+    @Body() { verifyId, hashKeyPair }: ResendVerifyCodeDto,
+  ) {
+    return this.authenticationService.resendVerifyCode(verifyId, hashKeyPair);
   }
 
   @HttpCode(HttpStatus.OK)

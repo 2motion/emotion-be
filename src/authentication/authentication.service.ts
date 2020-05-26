@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { AccountEntity } from '@app/entities/account.entity';
 import { from, Observable, Subscription, forkJoin, of } from 'rxjs';
-import { tap, map, concatMap } from 'rxjs/operators';
+import { tap, map, concatMap, pluck } from 'rxjs/operators';
 import AuthenticationServiceInterface from '@app/authentication/interfaces/authentication.service.interface';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -78,6 +78,38 @@ export class AuthenticationService
     };
   }
 
+  public resendVerifyCode(
+    verifyId: number,
+    hashKeyPair: string,
+  ): Observable<void> {
+    return from(
+      this.accountVerfiyRepository.findOne({
+        where: {
+          id: verifyId,
+          hashKeyPair,
+        },
+        include: [
+          {
+            model: this.accountRepository,
+          },
+        ],
+      }),
+    ).pipe(
+      pluck('account'),
+      concatMap((account: AccountEntity) => {
+        if (!account.isPending) {
+          throw new BadRequestException('이미 인증된 이용자 입니다.');
+        }
+        const verifyHashKey = this.createVerifyHashKey();
+        if (account.email) {
+          return this.sendVerifyEmail(account.email, verifyHashKey);
+        }
+        return this.sendVerifyPhoneNumber(account.phoneNumber, verifyHashKey);
+      }),
+      map(() => {}),
+    );
+  }
+
   public verify(
     verifyId: number,
     hashKey: number,
@@ -99,6 +131,10 @@ export class AuthenticationService
       concatMap((verifyEntity) => {
         if (!verifyEntity) {
           throw new BadRequestException('잘 못된 인증 요청 입니다.');
+        }
+
+        if (!verifyEntity.account.isPending) {
+          throw new BadRequestException('이미 인증된 이용자 입니다.');
         }
 
         if (moment().isBefore(verifyEntity.expiredAt)) {
@@ -159,10 +195,14 @@ export class AuthenticationService
     );
   }
 
+  public createVerifyHashKey(): number {
+    return Math.floor(Math.random() * 1000000000);
+  }
+
   public createVerifyHashKeyAndSave(
     accountId: number,
   ): Observable<AccountVerfiyEntity> {
-    const hashKey = Math.floor(1000 + Math.random() * 9000);
+    const hashKey = this.createVerifyHashKey();
     const hashKeyPair = [
       (Math.random() * 1e32).toString(36),
       (Math.random() * 2e32).toString(36),
