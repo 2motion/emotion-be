@@ -19,7 +19,11 @@ export class AccountProfileEntity extends Model<AccountProfileEntity> {
   public id: number;
 
   @AllowNull(true)
-  @Column(DataType.CHAR)
+  @Column(DataType.CHAR('200'))
+  public bio: string;
+
+  @AllowNull(true)
+  @Column(DataType.CHAR('200'))
   public avatarImage: string;
 
   @CreatedAt

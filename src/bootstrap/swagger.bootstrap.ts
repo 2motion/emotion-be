@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ArticleModule } from '@app/article/article.module';
 import { AuthenticationModule } from '@app/authentication/authentication.module';
+import { MeModule } from '@app/me/me.module';
 
 const swaggerBootstrap = (app: INestApplication) => {
   const customCss = () => `
@@ -1698,7 +1699,7 @@ const swaggerBootstrap = (app: INestApplication) => {
     .build();
 
   const document = SwaggerModule.createDocument(app, options, {
-    include: [ArticleModule, AuthenticationModule],
+    include: [ArticleModule, AuthenticationModule, MeModule],
   });
 
   SwaggerModule.setup('swagger', app, document, {

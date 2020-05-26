@@ -28,13 +28,16 @@ export class MeService {
     return profile$.pipe(map((entity) => this.convertFromEntity(entity)));
   }
 
-  public getProfileAccountEntityById(accountId: number) {
+  public getProfileAccountEntityById(
+    accountId: number,
+  ): Observable<AccountEntity> {
     return from(
       this.accountRepository.findByPk(accountId, {
         attributes: ['id', 'email', 'name', 'profileId'],
         include: [
           {
             model: this.accountProfileRepository,
+            required: true,
           },
         ],
       }),
@@ -55,7 +58,10 @@ export class MeService {
     return profile;
   }
 
-  public updateProfile(accountId: number, updateProfileDto: UpdateProfileDto) {
+  public updateProfile(
+    accountId: number,
+    updateProfileDto: UpdateProfileDto,
+  ): Observable<ProfileModel> {
     const updateProfile$ = this.getProfileAccountEntityById(accountId).pipe(
       concatMap((profile) => {
         if (updateProfileDto.avatarImage) {
@@ -63,10 +69,13 @@ export class MeService {
             accountId,
             updateProfileDto.avatarImage,
           ).pipe(
-            concatMap(() => {
+            concatMap((fileEntity) => {
               return from(
                 profile.update({
                   bio: updateProfileDto.bio,
+                  avatarImage: `${this.configService.get(
+                    'STATIC_IMAGE_HOST',
+                  )}/${fileEntity.hashKey}`,
                 }),
               );
             }),
@@ -87,8 +96,8 @@ export class MeService {
     accountId: number,
     avatarImage: Express.Multer.File,
   ) {
-    this.getProfileAccountEntityById(accountId).pipe(
-      concatMap((accountEntity) => {
+    return this.getProfileAccountEntityById(accountId).pipe(
+      concatMap(() => {
         return from(
           FileStorageUtil.saveToRemote(
             avatarImage.originalname,
@@ -103,30 +112,6 @@ export class MeService {
               }),
             ),
           ),
-          concatMap((fileEntity) =>
-            from(
-              accountEntity.profile.update({
-                avatarImage: `${this.configService.get('STATIC_IMAGE_HOST')}/${
-                  fileEntity.hashKey
-                }`,
-              }),
-            ),
-          ),
-        );
-      }),
-    );
-    return from(
-      FileStorageUtil.saveToRemote(
-        avatarImage.originalname,
-        avatarImage.buffer,
-      ),
-    ).pipe(
-      concatMap((hashKey) => {
-        return from(
-          this.fileRepository.create({
-            hashKey,
-            name: avatarImage.originalname,
-          }),
         );
       }),
     );
