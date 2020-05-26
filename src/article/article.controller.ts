@@ -80,8 +80,6 @@ export class ArticleController extends BaseController
       {
         fileFilter: (_req: Request, file, cb) => {
           const extension = mimeType.extension(file.mimetype) as string;
-          console.log('extension', extension);
-
           if (
             !['jpg', 'jpeg', 'png', 'gif', 'mp3', 'mp4', 'mpga'].includes(
               extension,

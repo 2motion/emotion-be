@@ -11,7 +11,12 @@ import {
   AllowNull,
   Default,
   Unique,
+  ForeignKey,
+  // AfterCreate,
+  BelongsTo,
+  AfterCreate,
 } from 'sequelize-typescript';
+import { AccountProfileEntity } from './account-profile.entity';
 
 @Table
 export class AccountEntity extends Model<AccountEntity> {
@@ -37,6 +42,11 @@ export class AccountEntity extends Model<AccountEntity> {
   @Column(DataType.TEXT)
   public password: string;
 
+  @ForeignKey(() => AccountProfileEntity)
+  @AllowNull(true)
+  @Column(DataType.BIGINT)
+  public profileId: number;
+
   @AllowNull(false)
   @Default(1)
   @Column(DataType.TINYINT)
@@ -61,4 +71,19 @@ export class AccountEntity extends Model<AccountEntity> {
   @AllowNull(true)
   @Column(DataType.DATE)
   public deleteAt: Date;
+
+  @BelongsTo(() => AccountProfileEntity)
+  public profile: AccountProfileEntity;
+
+  @AfterCreate
+  public static async onAfterCreate(instance: AccountEntity) {
+    instance.sequelize.transaction(async (transaction) => {
+      const profile = await AccountProfileEntity.create({
+        accountId: instance.id,
+        transaction,
+      });
+
+      await instance.update({ profileId: profile.id });
+    });
+  }
 }

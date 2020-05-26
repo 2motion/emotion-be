@@ -7,6 +7,7 @@ import { ArticleFileEntity } from '@app/entities/article-file.entity';
 import { FileEntity } from '@app/entities/file.entity';
 import { AccountVerfiyEntity } from '@app/entities/account-verfiy.entity';
 import { SmsHistoryEntity } from '@app/entities/sms-history.entity';
+import { AccountProfileEntity } from '@app/entities/account-profile.entity';
 
 export const databaseProviders = [
   {
@@ -30,6 +31,7 @@ export const databaseProviders = [
         FileEntity,
         ArticleFileEntity,
         SmsHistoryEntity,
+        AccountProfileEntity,
       ]);
 
       await sequelize.authenticate();

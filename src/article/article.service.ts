@@ -9,16 +9,17 @@ import FileStorageUtil from '@app/util/file-storage.util';
 import { FileEntity } from '@app/entities/file.entity';
 import { ArticleFileEntity } from '@app/entities/article-file.entity';
 import { ConfigService } from '@nestjs/config';
+import { Repository } from 'sequelize-typescript';
 
 @Injectable()
 export class ArticleService implements ArticleServiceInterface {
   public constructor(
     @Inject('ARTICLE_REPOSITORY')
-    private readonly articleRepository: typeof ArticleEntity,
+    private readonly articleRepository: Repository<ArticleEntity>,
     @Inject('ARTICLE_FILE_REPOSITORY')
-    private readonly articleFileRepository: typeof ArticleFileEntity,
+    private readonly articleFileRepository: Repository<ArticleFileEntity>,
     @Inject('FILE_REPOSITORY')
-    private readonly fileRepository: typeof FileEntity,
+    private readonly fileRepository: Repository<FileEntity>,
     private readonly configService: ConfigService,
   ) {}
 

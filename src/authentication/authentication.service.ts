@@ -25,6 +25,7 @@ import { LoginHistoryEntity } from '@app/entities/login-history.entity';
 import { SmsHistoryEntity } from '@app/entities/sms-history.entity';
 import SmsType from '@app/constants/sms-type';
 import AccessTokenModel from './model/access-token.model';
+import { Repository } from 'sequelize-typescript';
 
 @Injectable()
 export class AuthenticationService
@@ -33,13 +34,13 @@ export class AuthenticationService
 
   public constructor(
     @Inject('ACCOUNT_REPOSITORY')
-    private readonly accountRepository: typeof AccountEntity,
+    private readonly accountRepository: Repository<AccountEntity>,
     @Inject('ACCOUNT_VERFIY_REPOSITORY')
-    private readonly accountVerfiyRepository: typeof AccountVerfiyEntity,
+    private readonly accountVerfiyRepository: Repository<AccountVerfiyEntity>,
     @Inject('LOGIN_HISTORY_REPOSITORY')
-    private readonly loginHistoryRepository: typeof LoginHistoryEntity,
+    private readonly loginHistoryRepository: Repository<LoginHistoryEntity>,
     @Inject('SMS_HISTORY_REPOSITORY')
-    private readonly smsHistoryRepository: typeof SmsHistoryEntity,
+    private readonly smsHistoryRepository: Repository<SmsHistoryEntity>,
     private readonly configService: ConfigService,
     @InjectEventEmitter() private readonly emitter: AppEventEmitter,
   ) {}

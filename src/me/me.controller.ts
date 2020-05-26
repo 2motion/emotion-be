@@ -3,7 +3,6 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
-  Inject,
   Get,
 } from '@nestjs/common';
 import { CommonResponseReceiptDecorator } from '@app/shared/decorator/common-response-receipt.decorator';
@@ -12,16 +11,13 @@ import { BaseController } from '@app/base.controller';
 import { AuthGuard } from '@app/shared/guard/auth.guard';
 import { DecodedToken } from '@app/shared/decorator/decoded-token.decorator';
 import JwtDecodedInterface from '@app/shared/interface/jwt-decoded.interface';
-import { AccountEntity } from '@app/entities/account.entity';
 import ProfileModel from './model/profile.model';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { MeService } from './me.service';
 
 @Controller('me')
 export class MeController extends BaseController {
-  public constructor(
-    @Inject('ACCOUNT_REPOSITORY')
-    private readonly accountRepository: typeof AccountEntity,
-  ) {
+  public constructor(private readonly meService: MeService) {
     super();
   }
 
@@ -38,10 +34,6 @@ export class MeController extends BaseController {
   public getMyProfile(
     @DecodedToken() { accountId }: JwtDecodedInterface,
   ): Observable<ProfileModel> {
-    return from(
-      this.accountRepository.findByPk(accountId, {
-        attributes: ['name'],
-      }),
-    );
+    return this.meService.getProfileById(accountId);
   }
 }
