@@ -4,7 +4,6 @@ import {
   IsNotEmpty,
   IsString,
   MinLength,
-  IsPhoneNumber,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -21,7 +20,6 @@ class SignUpDto {
     description: '핸드폰 번호',
     required: false,
   })
-  @IsPhoneNumber('KR')
   @IsOptional()
   public phoneNumber?: string;
 
