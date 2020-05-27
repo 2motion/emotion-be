@@ -63,26 +63,26 @@ export class MeService {
     updateProfileDto: UpdateProfileDto,
   ): Observable<ProfileModel> {
     const updateProfile$ = this.getProfileAccountEntityById(accountId).pipe(
-      concatMap((profile) => {
+      concatMap((accountEntity) => {
         if (updateProfileDto.avatarImage) {
           return this.uploadAvatarImage(
             accountId,
             updateProfileDto.avatarImage,
           ).pipe(
-            concatMap((fileEntity) => {
+            concatMap((hashKey) => {
               return from(
-                profile.update({
+                accountEntity.profile.update({
                   bio: updateProfileDto.bio,
                   avatarImage: `${this.configService.get(
                     'STATIC_IMAGE_HOST',
-                  )}/${fileEntity.hashKey}`,
+                  )}/${hashKey}`,
                 }),
               );
             }),
           );
         }
         return from(
-          profile.update({
+          accountEntity.profile.update({
             bio: updateProfileDto.bio,
           }),
         );
@@ -95,24 +95,26 @@ export class MeService {
   public uploadAvatarImage(
     accountId: number,
     avatarImage: Express.Multer.File,
-  ) {
-    return this.getProfileAccountEntityById(accountId).pipe(
+  ): Observable<string> {
+    const saveFile$ = this.getProfileAccountEntityById(accountId).pipe(
       concatMap(() => {
         return from(
           FileStorageUtil.saveToRemote(
             avatarImage.originalname,
             avatarImage.buffer,
           ),
-        ).pipe(
-          concatMap((hashKey) =>
-            from(
-              this.fileRepository.create({
-                hashKey,
-                name: avatarImage.originalname,
-              }),
-            ),
-          ),
         );
+      }),
+    );
+
+    return saveFile$.pipe(
+      concatMap((hashKey) => {
+        return from(
+          this.fileRepository.create({
+            hashKey,
+            name: avatarImage.originalname,
+          }),
+        ).pipe(map(() => hashKey));
       }),
     );
   }
