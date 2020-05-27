@@ -1,6 +1,5 @@
 import {
   IsString,
-  IsPhoneNumber,
   IsOptional,
   IsEmail,
   IsNotEmpty,
@@ -12,7 +11,6 @@ class CreateAccessTokenDto {
   @ApiProperty({
     description: '핸드폰 번호',
   })
-  @IsPhoneNumber('KR')
   @IsOptional()
   public phoneNumber?: string;
 

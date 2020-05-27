@@ -111,6 +111,31 @@ export class AuthenticationService
     );
   }
 
+  public sendForgotPasswordVerifyCode(
+    account: AccountEntity,
+  ): Observable<{ verifyId: number; hashKeyPair: string }> {
+    const saveHashkey$ = this.createVerifyHashKeyAndSave(account.id);
+    return saveHashkey$.pipe(
+      concatMap((hashEntity) => {
+        const sent$ = (() => {
+          return account.email
+            ? this.sendVerifyEmail(account.email, hashEntity.hashKey)
+            : this.sendVerifyPhoneNumber(
+                account.phoneNumber,
+                hashEntity.hashKey,
+              );
+        })();
+
+        return sent$.pipe(
+          map(() => ({
+            verifyId: hashEntity.id,
+            hashKeyPair: hashEntity.hashKeyPair,
+          })),
+        );
+      }),
+    );
+  }
+
   public verify(
     verifyId: number,
     hashKey: number,
@@ -197,7 +222,7 @@ export class AuthenticationService
   }
 
   public createVerifyHashKey(): number {
-    return Math.floor(Math.random() * 1000000000);
+    return Math.floor(1000 + Math.random() * 9000);
   }
 
   public createVerifyHashKeyAndSave(
@@ -328,7 +353,7 @@ export class AuthenticationService
   ): Observable<SignUpModel> {
     return from(
       account.update({
-        name,
+        ...(account.name !== name ? { name } : {}),
         phoneNumber,
         password: this.encryptedPassword(password),
         createdAt: new Date(),
@@ -357,7 +382,7 @@ export class AuthenticationService
   ): Observable<SignUpModel> {
     return from(
       account.update({
-        name,
+        ...(account.name !== name ? { name } : {}),
         email,
         password: this.encryptedPassword(password),
         createdAt: new Date(),

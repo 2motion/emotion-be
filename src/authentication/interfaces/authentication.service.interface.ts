@@ -34,6 +34,9 @@ interface AuthenticationServiceInterface {
     password: string,
   ): Observable<SignUpModel>;
   resendVerifyCode(verifyId: number, hashKeyPair: string): Observable<void>;
+  sendForgotPasswordVerifyCode(
+    account: AccountEntity,
+  ): Observable<{ verifyId: number; hashKeyPair: string }>;
 }
 
 export default AuthenticationServiceInterface;

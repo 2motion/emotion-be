@@ -22,6 +22,7 @@ import SignUpModel from './model/sign-up.model';
 import AccessTokenModel from './model/access-token.model';
 import ResendVerifyCodeDto from './dto/resend-verify-code.dto';
 import { BaseController } from '@app/base.controller';
+import ForgotPasswrodDto from './dto/forgot-password.dto';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -41,7 +42,7 @@ export class AuthenticationController extends BaseController
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    type: String,
+    type: AccessTokenModel,
   })
   @ApiOperation({ summary: 'Access token 을 생성한다.' })
   @CommonResponseReceiptDecorator()
@@ -101,16 +102,66 @@ export class AuthenticationController extends BaseController
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    type: String,
   })
   @ApiOperation({ summary: '계정 인증 코드를 재 발송 한다.' })
   @CommonResponseReceiptDecorator()
   @Post('resend-verify-code')
   public resendVerifyCode(
     @Body() { verifyId, hashKeyPair }: ResendVerifyCodeDto,
-  ) {
+  ): Observable<void> {
     return this.authenticationService.resendVerifyCode(verifyId, hashKeyPair);
   }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  @ApiOperation({ summary: '비밀번호 찾기 인증 코드를 발송한다.' })
+  @CommonResponseReceiptDecorator()
+  @Post('forgot-password')
+  public forgotPassword(
+    @Body() { email, phoneNumber }: ForgotPasswrodDto,
+  ): Observable<{ verifyId: number; hashKeyPair: string }> {
+    if (!email && !phoneNumber) {
+      throw new BadRequestException('필수 입력 값이 누락되었습니다.');
+    }
+
+    const account$ = (() => {
+      if (email) {
+        return this.authenticationService.findByEmail(email);
+      }
+      return this.authenticationService.findByPhoneNumber(phoneNumber);
+    })();
+
+    return account$.pipe(
+      concatMap((account) => {
+        if (!account) {
+          throw new BadRequestException();
+        }
+
+        if (account.isPending) {
+          throw new BadRequestException(
+            '아직 계정 인증이 완료되지 않았습니다.',
+          );
+        }
+
+        if (account.isBlock) {
+          throw new BadRequestException('사용할 수 없는 계정 입니다.');
+        }
+
+        return this.authenticationService.sendForgotPasswordVerifyCode(account);
+      }),
+    );
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  @ApiOperation({ summary: '비밀번호를 리셋한다.' })
+  @CommonResponseReceiptDecorator()
+  @Post('reset-password')
+  public resetPassword() {}
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -165,26 +216,34 @@ export class AuthenticationController extends BaseController
           throw new UnauthorizedException();
         }
 
+        const existsName$ = this.authenticationService.checkNameExists(name);
         if (account && account.isPending) {
-          return (() => {
-            if (email) {
-              return this.authenticationService.updateExistsAccountWhenSignUpByEmail(
-                account,
-                name,
-                email,
-                password,
-              );
-            }
-            return this.authenticationService.updateExistsAccountWhenSignUpByPhoneNumber(
-              account,
-              name,
-              phoneNumber,
-              password,
-            );
-          })();
+          return existsName$.pipe(
+            concatMap((exists) => {
+              if (account.name !== name && exists) {
+                throw new BadRequestException('이미 존재하는 이름 입니다.');
+              }
+              return (() => {
+                if (email) {
+                  return this.authenticationService.updateExistsAccountWhenSignUpByEmail(
+                    account,
+                    name,
+                    email,
+                    password,
+                  );
+                }
+                return this.authenticationService.updateExistsAccountWhenSignUpByPhoneNumber(
+                  account,
+                  name,
+                  phoneNumber,
+                  password,
+                );
+              })();
+            }),
+          );
         }
 
-        return this.authenticationService.checkNameExists(name).pipe(
+        return existsName$.pipe(
           concatMap((exists) => {
             if (exists) {
               throw new BadRequestException('이미 존재하는 이름 입니다.');
