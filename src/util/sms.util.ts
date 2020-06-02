@@ -22,6 +22,7 @@ class SmsUtil {
       accessKeyId: this.accessKeyId,
       secretAccessKey: this.secretAccessKey,
       region: 'us-east-1',
+      apiVersion: '2010-03-31',
     });
   }
 }

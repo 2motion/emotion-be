@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AccountEntity } from '@app/entities/account.entity';
-import { from, Observable, Subscription, forkJoin, of } from 'rxjs';
+import { from, Observable, Subscription, forkJoin } from 'rxjs';
 import { tap, map, concatMap, pluck } from 'rxjs/operators';
 import AuthenticationServiceInterface from '@app/authentication/interfaces/authentication.service.interface';
 import * as bcrypt from 'bcryptjs';
@@ -261,15 +261,18 @@ export class AuthenticationService
         where: { phoneNumber, type: SmsType.Authentication },
       }),
     ).pipe(
-      map((sentCount) => {
-        if (sentCount > maximumDailySms) {
+      concatMap((sentCount) => {
+        if (Number(sentCount) < maximumDailySms) {
           throw new BadRequestException('일일 최대 발송 수를 초과했습니다.');
         }
-        return smsClient.send({
-          Message: `[Gamstagram] 인증번호는 ${verifyHash} 입니다.`,
-          MessageStructure: 'string',
-          PhoneNumber: phoneUtil.format(number, PNF.E164),
-        });
+        return from(
+          smsClient
+            .send({
+              Message: `[Gamstagram] 인증번호는 ${verifyHash} 입니다.`,
+              PhoneNumber: phoneUtil.format(number, PNF.E164),
+            })
+            .promise(),
+        );
       }),
       tap(() =>
         this.subscriptions.push(
@@ -290,25 +293,27 @@ export class AuthenticationService
       this.configService.get('APP_AWS_SECRET_ACCESS_KEY'),
     );
 
-    return of(
-      mailClient.send({
-        Destination: {
-          ToAddresses: [accountEmailAddress],
-        },
-        Message: {
-          Body: {
-            Text: {
-              Data: `인증 번호는 ${verifyHash} 입니다.`,
+    return from(
+      mailClient
+        .send({
+          Destination: {
+            ToAddresses: [accountEmailAddress],
+          },
+          Message: {
+            Body: {
+              Text: {
+                Data: `인증 번호는 ${verifyHash} 입니다.`,
+                Charset: 'utf-8',
+              },
+            },
+            Subject: {
+              Data: '[Gamstagram] 회원가입 인증을 마무리 해주세요.',
               Charset: 'utf-8',
             },
           },
-          Subject: {
-            Data: '[Gamstagram] 회원가입 인증을 마무리 해주세요.',
-            Charset: 'utf-8',
-          },
-        },
-        Source: 'suuport@gamstagram.com',
-      }),
+          Source: 'suuport@gamstagram.com',
+        })
+        .promise(),
     );
   }
 

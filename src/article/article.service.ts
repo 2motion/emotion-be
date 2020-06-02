@@ -47,6 +47,7 @@ export class ArticleService implements ArticleServiceInterface {
             ],
           },
         ],
+        order: [['id', 'desc']],
       }),
     ).pipe(
       map(({ rows, count }) => {

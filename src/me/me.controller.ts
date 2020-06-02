@@ -66,8 +66,6 @@ export class MeController extends BaseController {
       fileFilter: (_req: Request, file, cb) => {
         const extension = mimeType.extension(file.mimetype) as string;
 
-        console.log('extension', extension);
-
         if (!['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
           return cb(new BadRequestException(), false);
         }
