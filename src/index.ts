@@ -11,7 +11,6 @@ import * as awsServerlessExpress from 'aws-serverless-express';
 import * as express from 'express';
 import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
-import * as compression from 'compression';
 import { ValidationPipe } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
 import * as requestIp from 'request-ip';
@@ -35,7 +34,6 @@ export const bootstrapServer = async (): Promise<Server> => {
   app.enableCors();
   app.use(eventContext());
   app.use(helmet());
-  app.use(compression());
   app.use(requestIp.mw());
   app.useGlobalPipes(new ValidationPipe());
   app.disable('etag');
