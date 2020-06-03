@@ -3,7 +3,10 @@ import { APIGatewayProxyHandler } from 'aws-lambda';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Server } from 'http';
-import { ExpressAdapter } from '@nestjs/platform-express';
+import {
+  ExpressAdapter,
+  NestExpressApplication,
+} from '@nestjs/platform-express';
 import * as awsServerlessExpress from 'aws-serverless-express';
 import * as express from 'express';
 import * as dotenv from 'dotenv';
@@ -24,7 +27,10 @@ export const bootstrapServer = async (): Promise<Server> => {
 
   const expressApp = express();
   const adapter = new ExpressAdapter(expressApp);
-  const app = await NestFactory.create(AppModule, adapter);
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+    adapter,
+  );
 
   app.enableCors();
   app.use(eventContext());
@@ -32,6 +38,8 @@ export const bootstrapServer = async (): Promise<Server> => {
   app.use(compression());
   app.use(requestIp.mw());
   app.useGlobalPipes(new ValidationPipe());
+  app.disable('etag');
+  app.disable('x-powered-by');
 
   swaggerBootstrap(app);
 
