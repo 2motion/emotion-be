@@ -31,6 +31,11 @@ jobs:
         ACCESS_TOKEN_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN_PRIVATE_KEY }}
         SLACK_WEBHOOK_URL_OF_NEW: ${{ secrets.SLACK_WEBHOOK_URL_OF_NEW }}
         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        APP_AWS_ACCESS_KEY_ID: ${{ secrets.APP_AWS_ACCESS_KEY_ID }}
+        APP_AWS_SECRET_ACCESS_KEY: ${{ secrets.APP_AWS_SECRET_ACCESS_KEY }}
+        TINYPNG_API_KEY: ${{ secrets.TINYPNG_API_KEY }}
+        AWS_S3_IMAGE_UPLOAD_BUCKET: ${{ secrets.AWS_S3_IMAGE_UPLOAD_BUCKET }}
+        STATIC_IMAGE_HOST: ${{ secrets.STATIC_IMAGE_HOST }}
     - name: Showing dir
       run: ls -al
     - name: npm install
