@@ -8,6 +8,8 @@ const fs = require('fs');
   const templateLines = envTemplate.split(/\r?\n/);
   let env = "";
 
+  console.log('process.env', process.env);
+  console.log('envTemplate', envTemplate);
   for (let i = 0; i < templateLines.length; i++) {
     const [name, placeholder] = templateLines[i].split('=');
     if (!process.env[name]) {
