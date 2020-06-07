@@ -155,6 +155,7 @@ export class AuthenticationService
       }),
     ).pipe(
       concatMap((verifyEntity) => {
+        console.log(verifyEntity);
         if (!verifyEntity) {
           throw new BadRequestException('잘 못된 인증 요청 입니다.');
         }
@@ -167,7 +168,7 @@ export class AuthenticationService
           throw new BadRequestException('인증 시간이 만료되었습니다.');
         }
 
-        if (verifyEntity.attempts > 3) {
+        if (verifyEntity.attempts >= 3) {
           throw new UnauthorizedException();
         }
 
@@ -175,11 +176,13 @@ export class AuthenticationService
           verifyEntity.hashKey !== hashKey ||
           verifyEntity.hashKeyPair !== hashKeyPair
         ) {
-          return from(
+          const increaseAttemts$ = from(
             verifyEntity.update({
-              attempts: ++verifyEntity.attempts,
+              attempts: verifyEntity.attempts + 1,
             }),
           );
+          this.subscriptions.push(increaseAttemts$.subscribe());
+          throw new BadRequestException('유효하지 않은 인증 번호입니다.');
         }
 
         return from(

@@ -37,7 +37,7 @@ export class MeService {
         include: [
           {
             model: this.accountProfileRepository,
-            required: true,
+            required: false,
           },
         ],
       }),
