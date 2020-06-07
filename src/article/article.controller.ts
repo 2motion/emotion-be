@@ -10,6 +10,7 @@ import {
   HttpStatus,
   UseInterceptors,
   UploadedFiles,
+  Param,
 } from '@nestjs/common';
 import ArticleControllerInterface from './interfaces/article.controller.interface';
 import { ArticleService } from './article.service';
@@ -58,6 +59,20 @@ export class ArticleController extends BaseController
     rows: ArticleModel[];
   }> {
     return this.articleService.findAndCountAll();
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: ArticleListModel,
+  })
+  @ApiOperation({ summary: 'Article 상세 정보를 응답한다.' })
+  @CommonResponseReceiptDecorator()
+  @Get(':articleId')
+  public findById(
+    @Param('articleId') articleId: number,
+  ): Observable<ArticleModel> {
+    return this.articleService.getArticleById(articleId);
   }
 
   @HttpCode(HttpStatus.CREATED)

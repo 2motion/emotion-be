@@ -5,6 +5,7 @@ import ArticleModel from '../model/article.model';
 
 interface ArticleControllerInterface {
   findAndCountAll(): Observable<{ count: number; rows: ArticleModel[] }>;
+  findById(articleId: number): Observable<ArticleModel>;
   create(
     createArticleDto: CreateArticleDto,
     { accountId }: JwtDecodedInterface,
