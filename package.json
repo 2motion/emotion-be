@@ -103,7 +103,7 @@
     "prettier": "2.0.5",
     "serverless": "1.75.1",
     "serverless-domain-manager": "4.2.0",
-    "serverless-offline": "6.3.2",
+    "serverless-offline": "6.5.0",
     "serverless-plugin-optimize": "4.1.4-rc.1",
     "standard-version": "8.0.2",
     "supertest": "4.0.2",
