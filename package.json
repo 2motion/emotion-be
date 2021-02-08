@@ -80,7 +80,7 @@
     "@types/bcryptjs": "2.4.2",
     "@types/compression": "1.7.0",
     "@types/dotenv": "8.2.0",
-    "@types/express": "4.17.7",
+    "@types/express": "4.17.11",
     "@types/google-libphonenumber": "7.4.19",
     "@types/gravatar": "^1.8.1",
     "@types/helmet": "0.0.48",
