@@ -69,9 +69,9 @@
     "tinify": "1.6.0-beta.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "9.1.1",
-    "@commitlint/config-angular": "9.1.1",
-    "@commitlint/config-conventional": "9.1.1",
+    "@commitlint/cli": "9.1.2",
+    "@commitlint/config-angular": "9.1.2",
+    "@commitlint/config-conventional": "9.1.2",
     "@nestjs/cli": "7.1.5",
     "@nestjs/schematics": "7.2.7",
     "@nestjs/testing": "7.1.0",
