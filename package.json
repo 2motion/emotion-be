@@ -51,7 +51,7 @@
     "express": "4.17.1",
     "google-libphonenumber": "3.2.10",
     "gravatar": "^1.8.0",
-    "helmet": "3.22.0",
+    "helmet": "4.6.0",
     "jsonwebtoken": "8.5.1",
     "mime-types": "2.1.27",
     "moment": "2.26.0",
