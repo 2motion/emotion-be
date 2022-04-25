@@ -102,7 +102,7 @@
     "nodemon": "2.0.15",
     "prettier": "2.0.5",
     "serverless": "1.79.0",
-    "serverless-domain-manager": "4.2.0",
+    "serverless-domain-manager": "4.2.3",
     "serverless-offline": "6.8.0",
     "serverless-plugin-optimize": "4.1.4-rc.1",
     "standard-version": "8.0.2",
