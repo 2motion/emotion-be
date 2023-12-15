@@ -77,7 +77,7 @@
     "@nestjs/testing": "7.1.0",
     "@types/aws-lambda": "8.10.71",
     "@types/aws-serverless-express": "3.3.3",
-    "@types/bcryptjs": "2.4.2",
+    "@types/bcryptjs": "2.4.6",
     "@types/compression": "1.7.0",
     "@types/dotenv": "8.2.0",
     "@types/express": "4.17.11",
