@@ -37,7 +37,7 @@
     "@nestjs/config": "0.5.0",
     "@nestjs/core": "7.1.0",
     "@nestjs/platform-express": "7.1.0",
-    "@nestjs/sequelize": "0.1.0",
+    "@nestjs/sequelize": "0.2.0",
     "@nestjs/swagger": "4.5.6",
     "@sentry/node": "5.15.5",
     "@slack/webhook": "5.0.3",
